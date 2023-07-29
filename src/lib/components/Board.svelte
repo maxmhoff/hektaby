@@ -1,0 +1,406 @@
+<script lang="ts">
+	import { currentGame } from '$lib/stores/gameStore';
+	import type Tile from '$lib/types/tile';
+	import BoardTile from './BoardTile.svelte';
+
+	let tiles: Tile[] = [];
+	let residentialCap = 0;
+	let commercialCap = 0;
+	let industrialCap = 0;
+
+	initializeGame();
+
+	function initializeGame() {
+		tiles = [
+			{
+				index: 0,
+				tileType: 'default',
+				position: { x: 0, y: 0 },
+				adjacentTiles: [1, 2, 3, 4, 5, 6],
+				value: 0
+			},
+			{
+				index: 1,
+				tileType: 'default',
+				position: { x: 50, y: -90 },
+				adjacentTiles: [0, 2, 6, 7, 8, 9],
+				value: 0
+			},
+			{
+				index: 2,
+				tileType: 'default',
+				position: { x: 100, y: 0 },
+				adjacentTiles: [0, 1, 3, 9, 10, 11],
+				value: 0
+			},
+			{
+				index: 3,
+				tileType: 'default',
+				position: { x: 50, y: 90 },
+				adjacentTiles: [0, 2, 4, 11, 12, 13],
+				value: 0
+			},
+			{
+				index: 4,
+				tileType: 'default',
+				position: { x: -50, y: 90 },
+				adjacentTiles: [0, 3, 5, 13, 14, 15],
+				value: 0
+			},
+			{
+				index: 5,
+				tileType: 'default',
+				position: { x: -100, y: 0 },
+				adjacentTiles: [0, 4, 6, 15, 16, 17],
+				value: 0
+			},
+			{
+				index: 6,
+				tileType: 'default',
+				position: { x: -50, y: -90 },
+				adjacentTiles: [0, 1, 5, 7, 17, 18],
+				value: 0
+			},
+			{
+				index: 7,
+				tileType: 'default',
+				position: { x: 0, y: -180 },
+				adjacentTiles: [1, 6, 8, 18],
+				value: 0
+			},
+			{
+				index: 8,
+				tileType: 'default',
+				position: { x: 100, y: -180 },
+				adjacentTiles: [1, 7, 9],
+				value: 0
+			},
+			{
+				index: 9,
+				tileType: 'default',
+				position: { x: 150, y: -90 },
+				adjacentTiles: [1, 2, 8, 10],
+				value: 0
+			},
+			{
+				index: 10,
+				tileType: 'default',
+				position: { x: 200, y: 0 },
+				adjacentTiles: [2, 9, 11],
+				value: 0
+			},
+			{
+				index: 11,
+				tileType: 'default',
+				position: { x: 150, y: 90 },
+				adjacentTiles: [2, 3, 10, 12],
+				value: 0
+			},
+			{
+				index: 12,
+				tileType: 'default',
+				position: { x: 100, y: 180 },
+				adjacentTiles: [3, 11, 13],
+				value: 0
+			},
+			{
+				index: 13,
+				tileType: 'default',
+				position: { x: 0, y: 180 },
+				adjacentTiles: [3, 4, 12, 14],
+				value: 0
+			},
+			{
+				index: 14,
+				tileType: 'default',
+				position: { x: -100, y: 180 },
+				adjacentTiles: [4, 13, 15],
+				value: 0
+			},
+			{
+				index: 15,
+				tileType: 'default',
+				position: { x: -150, y: 90 },
+				adjacentTiles: [4, 5, 14, 16],
+				value: 0
+			},
+			{
+				index: 16,
+				tileType: 'default',
+				position: { x: -200, y: 0 },
+				adjacentTiles: [5, 15, 17],
+				value: 0
+			},
+			{
+				index: 17,
+				tileType: 'default',
+				position: { x: -150, y: -90 },
+				adjacentTiles: [5, 6, 16, 18],
+				value: 0
+			},
+			{
+				index: 18,
+				tileType: 'default',
+				position: { x: -100, y: -180 },
+				adjacentTiles: [6, 7, 17],
+				value: 0
+			}
+		];
+
+		const missingTiles = Math.round(Math.random() * 3) + 4;
+
+		for (let i = 0; i < missingTiles; i++) {
+			removeTile();
+		}
+
+		const specialTileNumber = Math.round(Math.random() * tiles.length);
+		tiles[specialTileNumber].tileType = 'power plant';
+		distributeZoneCaps();
+		currentGame.set({
+			score: 0,
+			maxZones: {
+				residential: residentialCap,
+				commercial: commercialCap,
+				industrial: industrialCap
+			},
+			specialZones: 1
+		});
+		console.log(tiles);
+	}
+
+	function distributeZoneCaps() {
+		const numOfAvailableTiles = tiles.length - $currentGame.specialZones;
+		residentialCap = Math.round(Math.random() * (numOfAvailableTiles - 3)) + 1;
+		commercialCap = Math.round(Math.random() * (numOfAvailableTiles - residentialCap - 2)) + 1;
+		industrialCap = numOfAvailableTiles - residentialCap - commercialCap;
+	}
+
+	function removeTile() {
+		const tilesThatCanBeRemoved = tiles.filter((tile) =>
+			tile.adjacentTiles.every((adjacentTileIdx) => {
+				const adjacentTile = tiles.find((item) => item.index === adjacentTileIdx);
+				return (
+					adjacentTile && adjacentTile.adjacentTiles.filter((idx) => idx !== tile.index).length >= 1
+				);
+			})
+		);
+
+		if (tilesThatCanBeRemoved.length === 0) {
+			console.log('No more tiles can be removed');
+			return;
+		}
+
+		const missingTileIndex = Math.round(Math.random() * tilesThatCanBeRemoved.length);
+		const tileToRemove = tilesThatCanBeRemoved[missingTileIndex];
+
+		if (tileToRemove) {
+			const tileIndex = tileToRemove.index;
+			for (let tile of tiles) {
+				tile.adjacentTiles = tile.adjacentTiles.filter((idx) => idx !== tileIndex);
+			}
+			tiles = tiles.filter((tile) => tile.index !== tileToRemove.index);
+		} else {
+			removeTile();
+		}
+	}
+	function handleClick(idx: number) {
+		switch (tiles[idx].tileType) {
+			case 'default':
+				if (
+					$currentGame.maxZones.residential -
+					tiles.filter((tile) => tile.tileType === 'residential').length
+				) {
+					tiles[idx].tileType = 'residential';
+					break;
+				}
+			case 'residential':
+				if (
+					$currentGame.maxZones.commercial -
+					tiles.filter((tile) => tile.tileType === 'commercial').length
+				) {
+					tiles[idx].tileType = 'commercial';
+					break;
+				}
+			case 'commercial':
+				if (
+					$currentGame.maxZones.industrial -
+					tiles.filter((tile) => tile.tileType === 'industrial').length
+				) {
+					tiles[idx].tileType = 'industrial';
+					break;
+				}
+			default:
+				tiles[idx].tileType = 'default';
+		}
+
+		calculateScore();
+		tiles = [...tiles];
+	}
+
+	function calculateScore() {
+		let sumScore = 0;
+		tiles.forEach((tile) => {
+			let tileScore = 0;
+			if (tile.tileType === 'residential') {
+				tileScore = 2;
+				tile.adjacentTiles.forEach((idx) => {
+					const adjacentTile = tiles.find((tile) => tile.index === idx);
+					if (adjacentTile) {
+						if (adjacentTile.tileType === 'residential') {
+							tileScore++;
+						}
+
+						if (adjacentTile.tileType === 'commercial') {
+							tileScore++;
+						}
+
+						if (adjacentTile.tileType === 'industrial') {
+							tileScore--;
+						}
+
+						if (adjacentTile.tileType === 'power plant') {
+							tileScore -= 2;
+						}
+					}
+				});
+			}
+			if (tile.tileType === 'commercial') {
+				tileScore = 0;
+				tile.adjacentTiles.forEach((idx) => {
+					const adjacentTile = tiles.find((tile) => tile.index === idx);
+					if (adjacentTile) {
+						if (adjacentTile.tileType === 'residential') {
+							tileScore += 2;
+						}
+
+						if (adjacentTile.tileType === 'commercial') {
+							tileScore--;
+						}
+
+						if (adjacentTile.tileType === 'industrial') {
+							tileScore += 2;
+						}
+
+						if (adjacentTile.tileType === 'power plant') {
+							tileScore -= 2;
+						}
+					}
+				});
+			}
+			if (tile.tileType === 'industrial') {
+				tileScore = 1;
+				tile.adjacentTiles.forEach((idx) => {
+					const adjacentTile = tiles.find((tile) => tile.index === idx);
+					if (adjacentTile) {
+						if (adjacentTile.tileType === 'commercial') {
+							tileScore++;
+						}
+
+						if (adjacentTile.tileType === 'industrial') {
+							tileScore += 2;
+						}
+
+						if (adjacentTile.tileType === 'power plant') {
+							tileScore += 2;
+						}
+					}
+				});
+			}
+			if (tileScore < 0) {
+				tileScore = 0;
+			}
+			tile.value = tileScore;
+			sumScore += tileScore;
+		});
+
+		currentGame.set({
+			score: sumScore,
+			maxZones: {
+				residential: residentialCap,
+				commercial: commercialCap,
+				industrial: industrialCap
+			},
+			specialZones: 1
+		});
+	}
+
+	function resetTiles() {
+		tiles.map((tile) => {
+			if (tile.tileType !== 'power plant') tile.tileType = 'default';
+		});
+		tiles = [...tiles];
+		currentGame.set({
+			score: 0,
+			maxZones: {
+				residential: residentialCap,
+				commercial: commercialCap,
+				industrial: industrialCap
+			},
+			specialZones: 1
+		});
+	}
+</script>
+
+<div class="board">
+	<div class="board__info">
+		<p class="board__score">Score: {$currentGame.score}</p>
+		<p>
+			<span>Residential: </span>{$currentGame.maxZones.residential -
+				tiles.filter((tile) => tile.tileType === 'residential')?.length}
+		</p>
+		<p>
+			<span>Commercial: </span>{$currentGame.maxZones.commercial -
+				tiles.filter((tile) => tile.tileType === 'commercial')?.length}
+		</p>
+		<p>
+			<span>Industrial: </span>{$currentGame.maxZones.industrial -
+				tiles.filter((tile) => tile.tileType === 'industrial')?.length}
+		</p>
+	</div>
+	{#each tiles as tile, idx}
+		<BoardTile
+			on:click={() => handleClick(idx)}
+			tileType={tile.tileType}
+			coordinates={tile.position}
+			tileScore={tile.value}
+		/>
+	{/each}
+	<div class="board__actions">
+		<button class="board__action" on:click={() => initializeGame()}>New game</button>
+		<button class="board__action" on:click={() => resetTiles()}>Reset</button>
+	</div>
+</div>
+
+<style lang="scss">
+	.board {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		position: relative;
+		width: 500px;
+		height: 700px;
+		background-color: white;
+		margin-left: auto;
+		margin-right: auto;
+
+		&__info {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&__score {
+			width: 70px;
+			margin-right: 1rem;
+		}
+
+		&__actions {
+			display: flex;
+			justify-content: center;
+		}
+
+		&__action {
+			margin: 0 0.5rem;
+		}
+	}
+</style>
