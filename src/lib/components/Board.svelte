@@ -30,42 +30,42 @@
 				index: 2,
 				tileType: 'default',
 				position: { x: 100, y: 0 },
-				adjacentTiles: [0, 1, 3, 9, 10, 11],
+				adjacentTiles: [0, 1, 3, 9, 10],
 				value: 0
 			},
 			{
 				index: 3,
 				tileType: 'default',
 				position: { x: 50, y: 90 },
-				adjacentTiles: [0, 2, 4, 11, 12, 13],
+				adjacentTiles: [0, 2, 4, 10, 11, 12],
 				value: 0
 			},
 			{
 				index: 4,
 				tileType: 'default',
 				position: { x: -50, y: 90 },
-				adjacentTiles: [0, 3, 5, 13, 14, 15],
+				adjacentTiles: [0, 3, 5, 12, 13, 14],
 				value: 0
 			},
 			{
 				index: 5,
 				tileType: 'default',
 				position: { x: -100, y: 0 },
-				adjacentTiles: [0, 4, 6, 15, 16, 17],
+				adjacentTiles: [0, 4, 6, 14, 15],
 				value: 0
 			},
 			{
 				index: 6,
 				tileType: 'default',
 				position: { x: -50, y: -90 },
-				adjacentTiles: [0, 1, 5, 7, 17, 18],
+				adjacentTiles: [0, 1, 5, 7, 15, 16],
 				value: 0
 			},
 			{
 				index: 7,
 				tileType: 'default',
 				position: { x: 0, y: -180 },
-				adjacentTiles: [1, 6, 8, 18],
+				adjacentTiles: [1, 6, 8, 16],
 				value: 0
 			},
 			{
@@ -79,75 +79,61 @@
 				index: 9,
 				tileType: 'default',
 				position: { x: 150, y: -90 },
-				adjacentTiles: [1, 2, 8, 10],
+				adjacentTiles: [1, 2, 8],
 				value: 0
 			},
 			{
 				index: 10,
 				tileType: 'default',
-				position: { x: 200, y: 0 },
-				adjacentTiles: [2, 9, 11],
+				position: { x: 150, y: 90 },
+				adjacentTiles: [2, 3, 11],
 				value: 0
 			},
 			{
 				index: 11,
 				tileType: 'default',
-				position: { x: 150, y: 90 },
-				adjacentTiles: [2, 3, 10, 12],
+				position: { x: 100, y: 180 },
+				adjacentTiles: [3, 10, 12],
 				value: 0
 			},
 			{
 				index: 12,
 				tileType: 'default',
-				position: { x: 100, y: 180 },
-				adjacentTiles: [3, 11, 13],
+				position: { x: 0, y: 180 },
+				adjacentTiles: [3, 4, 11, 13],
 				value: 0
 			},
 			{
 				index: 13,
 				tileType: 'default',
-				position: { x: 0, y: 180 },
-				adjacentTiles: [3, 4, 12, 14],
+				position: { x: -100, y: 180 },
+				adjacentTiles: [4, 12, 14],
 				value: 0
 			},
 			{
 				index: 14,
 				tileType: 'default',
-				position: { x: -100, y: 180 },
-				adjacentTiles: [4, 13, 15],
+				position: { x: -150, y: 90 },
+				adjacentTiles: [4, 5, 13],
 				value: 0
 			},
 			{
 				index: 15,
 				tileType: 'default',
-				position: { x: -150, y: 90 },
-				adjacentTiles: [4, 5, 14, 16],
+				position: { x: -150, y: -90 },
+				adjacentTiles: [5, 6, 16],
 				value: 0
 			},
 			{
 				index: 16,
 				tileType: 'default',
-				position: { x: -200, y: 0 },
-				adjacentTiles: [5, 15, 17],
-				value: 0
-			},
-			{
-				index: 17,
-				tileType: 'default',
-				position: { x: -150, y: -90 },
-				adjacentTiles: [5, 6, 16, 18],
-				value: 0
-			},
-			{
-				index: 18,
-				tileType: 'default',
 				position: { x: -100, y: -180 },
-				adjacentTiles: [6, 7, 17],
+				adjacentTiles: [6, 7, 15],
 				value: 0
 			}
 		];
 
-		const missingTiles = Math.round(Math.random() * 3) + 4;
+		const missingTiles = Math.round(Math.random() * 3) + 2;
 
 		for (let i = 0; i < missingTiles; i++) {
 			removeTile();
@@ -377,7 +363,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		position: relative;
-		width: 500px;
+		width: 400px;
 		height: 700px;
 		background-color: white;
 		margin-left: auto;
