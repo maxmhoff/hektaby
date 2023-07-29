@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { currentGame } from '$lib/stores/gameStore';
 	import type Tile from '$lib/types/tile';
+	import type TileType from '$lib/types/tile-type';
+	import shuffleArray from '$lib/utilities/shuffle-array';
 	import BoardTile from './BoardTile.svelte';
 
 	let tiles: Tile[] = [];
-	let residentialCap = 0;
-	let commercialCap = 0;
-	let industrialCap = 0;
+	let zoneQueue: TileType[] = [];
+	let currentZoneQueue: TileType[] = [];
+	let gameState: 'In progress' | 'Finished';
 
 	initializeGame();
 
@@ -141,24 +143,34 @@
 
 		const specialTileNumber = Math.round(Math.random() * tiles.length);
 		tiles[specialTileNumber].tileType = 'power plant';
-		distributeZoneCaps();
+		createZoneQueue();
+		currentZoneQueue = zoneQueue;
 		currentGame.set({
 			score: 0,
-			maxZones: {
-				residential: residentialCap,
-				commercial: commercialCap,
-				industrial: industrialCap
-			},
 			specialZones: 1
 		});
-		console.log(tiles);
 	}
 
-	function distributeZoneCaps() {
+	function createZoneQueue() {
+		zoneQueue = [];
 		const numOfAvailableTiles = tiles.length - $currentGame.specialZones;
-		residentialCap = Math.round(Math.random() * (numOfAvailableTiles - 3)) + 1;
-		commercialCap = Math.round(Math.random() * (numOfAvailableTiles - residentialCap - 2)) + 1;
-		industrialCap = numOfAvailableTiles - residentialCap - commercialCap;
+		const numOfResidentialTiles = Math.round(Math.random() * (numOfAvailableTiles - 3)) + 1;
+		const numOfCommercialTiles =
+			Math.round(Math.random() * (numOfAvailableTiles - numOfResidentialTiles - 2)) + 1;
+		const numOfIndustrialTiles = numOfAvailableTiles - numOfResidentialTiles - numOfCommercialTiles;
+		for (let i = 0; i < numOfResidentialTiles; i++) {
+			zoneQueue.push('residential');
+		}
+
+		for (let i = 0; i < numOfCommercialTiles; i++) {
+			zoneQueue.push('commercial');
+		}
+
+		for (let i = 0; i < numOfIndustrialTiles; i++) {
+			zoneQueue.push('industrial');
+		}
+
+		shuffleArray(zoneQueue);
 	}
 
 	function removeTile() {
@@ -189,36 +201,19 @@
 			removeTile();
 		}
 	}
-	function handleClick(idx: number) {
-		switch (tiles[idx].tileType) {
-			case 'default':
-				if (
-					$currentGame.maxZones.residential -
-					tiles.filter((tile) => tile.tileType === 'residential').length
-				) {
-					tiles[idx].tileType = 'residential';
-					break;
-				}
-			case 'residential':
-				if (
-					$currentGame.maxZones.commercial -
-					tiles.filter((tile) => tile.tileType === 'commercial').length
-				) {
-					tiles[idx].tileType = 'commercial';
-					break;
-				}
-			case 'commercial':
-				if (
-					$currentGame.maxZones.industrial -
-					tiles.filter((tile) => tile.tileType === 'industrial').length
-				) {
-					tiles[idx].tileType = 'industrial';
-					break;
-				}
-			default:
-				tiles[idx].tileType = 'default';
-		}
 
+	
+	function handleClick(idx: number) {
+		if(tiles[idx].tileType === 'default') {
+			const tileType = currentZoneQueue.pop();
+			if(tileType) {
+				tiles[idx].tileType = tileType;
+				currentZoneQueue = [...currentZoneQueue];
+			}
+		}
+		if(tiles.every(item => item.tileType !== 'default')) {
+			gameState = 'Finished';
+		}
 		calculateScore();
 		tiles = [...tiles];
 	}
@@ -301,47 +296,31 @@
 
 		currentGame.set({
 			score: sumScore,
-			maxZones: {
-				residential: residentialCap,
-				commercial: commercialCap,
-				industrial: industrialCap
-			},
 			specialZones: 1
 		});
 	}
 
-	function resetTiles() {
+	function resetGame() {
+		currentZoneQueue = [...zoneQueue];
+		currentGame.set({
+			score: 0,
+			specialZones: 1
+		});
 		tiles.map((tile) => {
 			if (tile.tileType !== 'power plant') tile.tileType = 'default';
 		});
 		tiles = [...tiles];
-		currentGame.set({
-			score: 0,
-			maxZones: {
-				residential: residentialCap,
-				commercial: commercialCap,
-				industrial: industrialCap
-			},
-			specialZones: 1
-		});
 	}
 </script>
 
 <div class="board">
 	<div class="board__info">
 		<p class="board__score">Score: {$currentGame.score}</p>
-		<p>
-			<span>Residential: </span>{$currentGame.maxZones.residential -
-				tiles.filter((tile) => tile.tileType === 'residential')?.length}
-		</p>
-		<p>
-			<span>Commercial: </span>{$currentGame.maxZones.commercial -
-				tiles.filter((tile) => tile.tileType === 'commercial')?.length}
-		</p>
-		<p>
-			<span>Industrial: </span>{$currentGame.maxZones.industrial -
-				tiles.filter((tile) => tile.tileType === 'industrial')?.length}
-		</p>
+		<ul class="board__queue">
+		{#each currentZoneQueue as zone, idx}
+			<li class={`board__queue-item board__queue-item--${zone} ${idx === currentZoneQueue.length - 1 ? 'board__queue-item--last' :''}`} />
+		{/each}
+		</ul>
 	</div>
 	{#each tiles as tile, idx}
 		<BoardTile
@@ -353,7 +332,7 @@
 	{/each}
 	<div class="board__actions">
 		<button class="board__action" on:click={() => initializeGame()}>New game</button>
-		<button class="board__action" on:click={() => resetTiles()}>Reset</button>
+		<button class="board__action" on:click={() => resetGame()}>Reset</button>
 	</div>
 </div>
 
@@ -363,13 +342,14 @@
 		flex-direction: column;
 		justify-content: space-between;
 		position: relative;
-		width: 400px;
+		width: 500px;
 		height: 700px;
 		background-color: white;
 		margin-left: auto;
 		margin-right: auto;
 
 		&__info {
+			padding: 2rem;
 			width: 100%;
 			display: flex;
 			justify-content: space-between;
@@ -378,6 +358,34 @@
 		&__score {
 			width: 70px;
 			margin-right: 1rem;
+		}
+
+		&__queue {
+			display: flex;
+			gap: .5rem;
+		}
+
+		&__queue-item {
+			width: .75rem;
+			height: 2rem;
+			background-color: black;
+
+			&--residential {
+				background-color: #72d772;
+			}
+
+			&--commercial {
+				background-color: #6ca7c9;
+			}
+
+			&--industrial {
+				background-color: #9c7c56;
+			}
+
+			&--last {
+				width: 3rem;
+				height: 3rem;
+			}
 		}
 
 		&__actions {
