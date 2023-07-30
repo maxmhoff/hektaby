@@ -2,15 +2,23 @@
 	import { currentGame } from '$lib/stores/gameStore';
 	import type Tile from '$lib/types/tile';
 	import type TileType from '$lib/types/tile-type';
+	import calculateScore from '$lib/utilities/calculate-score';
 	import shuffleArray from '$lib/utilities/shuffle-array';
+	import { onMount } from 'svelte';
 	import BoardTile from './BoardTile.svelte';
 
-	let tiles: Tile[] = [];
-	let zoneQueue: TileType[] = [];
-	let currentZoneQueue: TileType[] = [];
+	let tiles: Tile[];
+	let zoneQueue: TileType[];
+	let currentZoneQueue: TileType[];
 	let gameState: 'In progress' | 'Finished';
 
-	initializeGame();
+	onMount(() => {
+		tiles = [];
+		zoneQueue = [];
+		currentZoneQueue = [];
+		gameState = 'In progress';
+		initializeGame();
+	});
 
 	function initializeGame() {
 		tiles = [
@@ -144,7 +152,7 @@
 		const specialTileNumber = Math.round(Math.random() * tiles.length);
 		tiles[specialTileNumber].tileType = 'power plant';
 		createZoneQueue();
-		currentZoneQueue = zoneQueue;
+		currentZoneQueue = [...zoneQueue];
 		currentGame.set({
 			score: 0,
 			specialZones: 1
@@ -202,102 +210,19 @@
 		}
 	}
 
-	
 	function handleClick(idx: number) {
-		if(tiles[idx].tileType === 'default') {
+		if (tiles[idx].tileType === 'default') {
 			const tileType = currentZoneQueue.pop();
-			if(tileType) {
+			if (tileType) {
 				tiles[idx].tileType = tileType;
 				currentZoneQueue = [...currentZoneQueue];
 			}
 		}
-		if(tiles.every(item => item.tileType !== 'default')) {
+		if (tiles.every((item) => item.tileType !== 'default')) {
 			gameState = 'Finished';
 		}
-		calculateScore();
+		calculateScore(tiles);
 		tiles = [...tiles];
-	}
-
-	function calculateScore() {
-		let sumScore = 0;
-		tiles.forEach((tile) => {
-			let tileScore = 0;
-			if (tile.tileType === 'residential') {
-				tileScore = 2;
-				tile.adjacentTiles.forEach((idx) => {
-					const adjacentTile = tiles.find((tile) => tile.index === idx);
-					if (adjacentTile) {
-						if (adjacentTile.tileType === 'residential') {
-							tileScore++;
-						}
-
-						if (adjacentTile.tileType === 'commercial') {
-							tileScore++;
-						}
-
-						if (adjacentTile.tileType === 'industrial') {
-							tileScore--;
-						}
-
-						if (adjacentTile.tileType === 'power plant') {
-							tileScore -= 2;
-						}
-					}
-				});
-			}
-			if (tile.tileType === 'commercial') {
-				tileScore = 0;
-				tile.adjacentTiles.forEach((idx) => {
-					const adjacentTile = tiles.find((tile) => tile.index === idx);
-					if (adjacentTile) {
-						if (adjacentTile.tileType === 'residential') {
-							tileScore += 2;
-						}
-
-						if (adjacentTile.tileType === 'commercial') {
-							tileScore--;
-						}
-
-						if (adjacentTile.tileType === 'industrial') {
-							tileScore += 2;
-						}
-
-						if (adjacentTile.tileType === 'power plant') {
-							tileScore -= 2;
-						}
-					}
-				});
-			}
-			if (tile.tileType === 'industrial') {
-				tileScore = 1;
-				tile.adjacentTiles.forEach((idx) => {
-					const adjacentTile = tiles.find((tile) => tile.index === idx);
-					if (adjacentTile) {
-						if (adjacentTile.tileType === 'commercial') {
-							tileScore++;
-						}
-
-						if (adjacentTile.tileType === 'industrial') {
-							tileScore += 2;
-						}
-
-						if (adjacentTile.tileType === 'power plant') {
-							tileScore += 2;
-						}
-					}
-				});
-			}
-			if (tileScore < 0) {
-				tileScore = 0;
-			}
-			tile.value = tileScore;
-			sumScore += tileScore;
-		});
-
-		currentGame.set({
-			score: sumScore,
-			specialZones: 1
-		});
 	}
 
 	function resetGame() {
@@ -316,20 +241,28 @@
 <div class="board">
 	<div class="board__info">
 		<p class="board__score">Score: {$currentGame.score}</p>
-		<ul class="board__queue">
-		{#each currentZoneQueue as zone, idx}
-			<li class={`board__queue-item board__queue-item--${zone} ${idx === currentZoneQueue.length - 1 ? 'board__queue-item--last' :''}`} />
-		{/each}
-		</ul>
+		{#if currentZoneQueue}
+			<ul class="board__queue">
+				{#each currentZoneQueue as zone, idx}
+					<li
+						class={`board__queue-item board__queue-item--${zone} ${
+							idx === currentZoneQueue.length - 1 ? 'board__queue-item--last' : ''
+						}`}
+					/>
+				{/each}
+			</ul>
+		{/if}
 	</div>
-	{#each tiles as tile, idx}
-		<BoardTile
-			on:click={() => handleClick(idx)}
-			tileType={tile.tileType}
-			coordinates={tile.position}
-			tileScore={tile.value}
-		/>
-	{/each}
+	{#if tiles}
+		{#each tiles as tile, idx}
+			<BoardTile
+				on:click={() => handleClick(idx)}
+				tileType={tile.tileType}
+				coordinates={tile.position}
+				tileScore={tile.value}
+			/>
+		{/each}
+	{/if}
 	<div class="board__actions">
 		<button class="board__action" on:click={() => initializeGame()}>New game</button>
 		<button class="board__action" on:click={() => resetGame()}>Reset</button>
@@ -362,11 +295,11 @@
 
 		&__queue {
 			display: flex;
-			gap: .5rem;
+			gap: 0.5rem;
 		}
 
 		&__queue-item {
-			width: .75rem;
+			width: 0.75rem;
 			height: 2rem;
 			background-color: black;
 
