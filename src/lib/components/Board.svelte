@@ -1,26 +1,37 @@
 <script lang="ts">
 	import { currentGame } from '$lib/stores/gameStore';
 	import type Tile from '$lib/types/tile';
-	import type TileType from '$lib/types/tile-type';
 	import calculateScore from '$lib/utilities/calculate-score';
 	import shuffleArray from '$lib/utilities/shuffle-array';
 	import { onMount } from 'svelte';
 	import BoardTile from './BoardTile.svelte';
+	import TileIcon from './TileIcon.svelte';
+	import type { TileType } from '$lib/types/tile';
+	import generateSeededRandom from '$lib/utilities/generate-seeded-random';
+	import { goto } from '$app/navigation';
+	import createSeed from '$lib/utilities/create-seed';
 
+	export let seed: string;
 	let tiles: Tile[];
 	let zoneQueue: TileType[];
-	let currentZoneQueue: TileType[];
-	let gameState: 'In progress' | 'Finished';
+	let gameState: 'in progress' | 'finished';
+	let endDialog: HTMLDialogElement;
+	let seedStringArray: string[];
 
 	onMount(() => {
-		tiles = [];
-		zoneQueue = [];
-		currentZoneQueue = [];
-		gameState = 'In progress';
+		clearCurrentGame();
 		initializeGame();
 	});
 
+	function clearCurrentGame() {
+		tiles = [];
+		zoneQueue = [];
+		gameState = 'in progress';
+	}
+
 	function initializeGame() {
+		seedStringArray = seed.split('-');
+		endDialog.close();
 		tiles = [
 			{
 				index: 0,
@@ -143,28 +154,29 @@
 			}
 		];
 
-		const missingTiles = Math.round(Math.random() * 3) + 2;
+		const missingTiles = Math.round(generateSeededRandom(seedStringArray[0]) * 3) + 2;
 
 		for (let i = 0; i < missingTiles; i++) {
 			removeTile();
 		}
 
-		const specialTileNumber = Math.round(Math.random() * tiles.length);
+		const specialTileNumber = Math.round(generateSeededRandom(seedStringArray[1]) * tiles.length);
 		tiles[specialTileNumber].tileType = 'power plant';
 		createZoneQueue();
-		currentZoneQueue = [...zoneQueue];
 		currentGame.set({
 			score: 0,
-			specialZones: 1
+			specialZones: 1,
+			zoneQueue: [...zoneQueue],
 		});
+		gameState = 'in progress';
 	}
 
 	function createZoneQueue() {
 		zoneQueue = [];
 		const numOfAvailableTiles = tiles.length - $currentGame.specialZones;
-		const numOfResidentialTiles = Math.round(Math.random() * (numOfAvailableTiles - 3)) + 1;
+		const numOfResidentialTiles = Math.round(generateSeededRandom(seedStringArray[1]) * (numOfAvailableTiles - 3)) + 1;
 		const numOfCommercialTiles =
-			Math.round(Math.random() * (numOfAvailableTiles - numOfResidentialTiles - 2)) + 1;
+			Math.round(generateSeededRandom(seedStringArray[1]) * (numOfAvailableTiles - numOfResidentialTiles - 2)) + 1;
 		const numOfIndustrialTiles = numOfAvailableTiles - numOfResidentialTiles - numOfCommercialTiles;
 		for (let i = 0; i < numOfResidentialTiles; i++) {
 			zoneQueue.push('residential');
@@ -191,12 +203,7 @@
 			})
 		);
 
-		if (tilesThatCanBeRemoved.length === 0) {
-			console.log('No more tiles can be removed');
-			return;
-		}
-
-		const missingTileIndex = Math.round(Math.random() * tilesThatCanBeRemoved.length);
+		const missingTileIndex = Math.round(generateSeededRandom(seedStringArray[2]) * tilesThatCanBeRemoved.length);
 		const tileToRemove = tilesThatCanBeRemoved[missingTileIndex];
 
 		if (tileToRemove) {
@@ -212,47 +219,45 @@
 
 	function handleClick(idx: number) {
 		if (tiles[idx].tileType === 'default') {
+			const currentZoneQueue = $currentGame.zoneQueue;
 			const tileType = currentZoneQueue.pop();
+			currentGame.set({score: $currentGame.score, specialZones: 1, zoneQueue: currentZoneQueue});
 			if (tileType) {
 				tiles[idx].tileType = tileType;
-				currentZoneQueue = [...currentZoneQueue];
 			}
 		}
 		if (tiles.every((item) => item.tileType !== 'default')) {
-			gameState = 'Finished';
+			gameState = 'finished';
+			endDialog.showModal();
 		}
-		calculateScore(tiles);
+		currentGame.set({score: calculateScore(tiles), specialZones: 1, zoneQueue: $currentGame.zoneQueue});
+
 		tiles = [...tiles];
 	}
 
 	function resetGame() {
-		currentZoneQueue = [...zoneQueue];
+		endDialog.close();
 		currentGame.set({
 			score: 0,
-			specialZones: 1
+			specialZones: 1,
+			zoneQueue: [...zoneQueue],
 		});
 		tiles.map((tile) => {
 			if (tile.tileType !== 'power plant') tile.tileType = 'default';
 		});
 		tiles = [...tiles];
+		gameState = 'in progress'
+	}
+
+	function startNewGame() {
+		clearCurrentGame();
+		seed = createSeed();
+		initializeGame();
+		setTimeout(() => goto(`/${seed}`), 0);
 	}
 </script>
 
 <div class="board">
-	<div class="board__info">
-		<p class="board__score">Score: {$currentGame.score}</p>
-		{#if currentZoneQueue}
-			<ul class="board__queue">
-				{#each currentZoneQueue as zone, idx}
-					<li
-						class={`board__queue-item board__queue-item--${zone} ${
-							idx === currentZoneQueue.length - 1 ? 'board__queue-item--last' : ''
-						}`}
-					/>
-				{/each}
-			</ul>
-		{/if}
-	</div>
 	{#if tiles}
 		{#each tiles as tile, idx}
 			<BoardTile
@@ -264,9 +269,13 @@
 		{/each}
 	{/if}
 	<div class="board__actions">
-		<button class="board__action" on:click={() => initializeGame()}>New game</button>
-		<button class="board__action" on:click={() => resetGame()}>Reset</button>
+		
 	</div>
+	<dialog bind:this={endDialog} class="board__dialog">
+		<p>Your final score was: {$currentGame.score}</p>
+		<button class="board__action" on:click={() => startNewGame()}>New game</button>
+		<button class="board__action" on:click={() => resetGame()}>Try again</button>
+	</dialog>
 </div>
 
 <style lang="scss">
@@ -276,7 +285,7 @@
 		justify-content: space-between;
 		position: relative;
 		width: 500px;
-		height: 700px;
+		height: 500px;
 		background-color: white;
 		margin-left: auto;
 		margin-right: auto;
@@ -293,34 +302,6 @@
 			margin-right: 1rem;
 		}
 
-		&__queue {
-			display: flex;
-			gap: 0.5rem;
-		}
-
-		&__queue-item {
-			width: 0.75rem;
-			height: 2rem;
-			background-color: black;
-
-			&--residential {
-				background-color: #72d772;
-			}
-
-			&--commercial {
-				background-color: #6ca7c9;
-			}
-
-			&--industrial {
-				background-color: #9c7c56;
-			}
-
-			&--last {
-				width: 3rem;
-				height: 3rem;
-			}
-		}
-
 		&__actions {
 			display: flex;
 			justify-content: center;
@@ -328,6 +309,9 @@
 
 		&__action {
 			margin: 0 0.5rem;
+		}
+
+		&__dialog {
 		}
 	}
 </style>

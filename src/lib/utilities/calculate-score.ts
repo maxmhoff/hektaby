@@ -1,7 +1,7 @@
 import { currentGame } from '$lib/stores/gameStore';
 import type Tile from '$lib/types/tile';
 
-function calculateScore(tiles: Tile[]) {
+function calculateScore(tiles: Tile[]): number {
 	let sumScore = 0;
 	tiles.forEach((tile) => {
 		let tileScore = 0;
@@ -77,10 +77,7 @@ function calculateScore(tiles: Tile[]) {
 		sumScore += tileScore;
 	});
 
-	currentGame.set({
-		score: sumScore,
-		specialZones: 1
-	});
+	return sumScore;
 }
 
 export default calculateScore;

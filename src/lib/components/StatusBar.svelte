@@ -1,0 +1,103 @@
+<script lang="ts">
+	import { currentGame } from '$lib/stores/gameStore';
+	import '$lib/styles/variables.scss';
+	import TileIcon from './TileIcon.svelte';
+
+	export let seed: string;
+
+	$: seed;
+
+	function capitalize(str: string) {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+
+	function formatSeed(str: string) {
+		const seedStringArray = str.split('-');
+		return `${capitalize(seedStringArray[0])} ${capitalize(seedStringArray[1])} ${capitalize(
+			seedStringArray[2]
+		)}`;
+	}
+</script>
+
+<div class="status-bar">
+	<p class="status-bar__title">{formatSeed(seed)}</p>
+	<div class="status-bar__row">
+		<p class="status-bar__score">{$currentGame.score}</p>
+		{#if $currentGame.zoneQueue}
+			<ul class="status-bar__queue">
+				{#each $currentGame.zoneQueue as zone, idx}
+					<li
+						class={`status-bar__queue-item status-bar__queue-item--${zone} ${
+							idx === $currentGame.zoneQueue.length - 1 ? 'status-bar__queue-item--last' : ''
+						}`}
+					>
+						{#if idx === $currentGame.zoneQueue.length - 1}
+							<TileIcon tileType={zone} />
+						{/if}
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</div>
+</div>
+
+<style lang="scss">
+	@use '../styles/variables.scss' as *;
+
+	.status-bar {
+		position: relative;
+		width: 500px;
+		margin-top: 2rem;
+		margin-left: auto;
+		margin-right: auto;
+        padding: 0 1rem;
+
+		&__title {
+			font-size: $text-lg;
+			margin-bottom: 1rem;
+		}
+
+        &__row {
+            display: flex;
+            height: 100px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+		&__queue {
+			display: flex;
+			gap: 0.4rem;
+		}
+
+		&__queue-item {
+			position: relative;
+			width: 0.5rem;
+			height: 2rem;
+			margin-top: 1.4rem;
+			background-color: black;
+
+			&--residential {
+				background-color: #72d772;
+			}
+
+			&--commercial {
+				background-color: #6ca7c9;
+			}
+
+			&--industrial {
+				background-color: #9c7c56;
+			}
+
+			&--last {
+				width: 4rem;
+				height: 4.8rem;
+				margin-top: 0;
+				clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+			}
+		}
+
+		&__score {
+			font-size: $text-sm;
+		}
+	}
+</style>

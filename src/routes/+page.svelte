@@ -1,6 +1,9 @@
-<script>
-	import Board from "$lib/components/Board.svelte";
+<script lang="ts">
+	import { goto } from "$app/navigation";
+	import createSeed from "$lib/utilities/create-seed";
 </script>
 
-<h1>Hektaby</h1>
-<Board />
+<p>Frontpage</p>
+
+<button on:click={() => goto(`/${createSeed()}`)}>Start</button>
+

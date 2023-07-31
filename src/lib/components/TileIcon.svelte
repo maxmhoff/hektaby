@@ -1,7 +1,7 @@
 <script lang="ts">
-    // icons from https://lucide.dev/
-	import type TileType from '$lib/types/tile-type';
+	import type { TileType } from "$lib/types/tile";
 
+    // icons from https://lucide.dev/
 	export let tileType: TileType;
 </script>
 

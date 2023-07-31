@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type TileType from '$lib/types/tile-type';
+	import type { TileType } from '$lib/types/tile';
 	import TileIcon from './TileIcon.svelte';
 	export let coordinates: { x: number; y: number } = { x: 0, y: 0 };
 	export let tileType: TileType;

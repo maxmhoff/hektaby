@@ -1,4 +1,4 @@
-import type TileType from "./tile-type"
+export type TileType = 'default' | 'commercial' | 'industrial' | 'residential' | 'school' | 'power plant';
 
 type Tile = {
     index: number,
