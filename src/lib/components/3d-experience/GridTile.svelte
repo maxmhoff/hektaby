@@ -11,21 +11,33 @@
 	export let tile: Tile;
 
 	let color = 'grey';
-	const defaultHeight = .4;
+	const defaultHeight = 0.4;
 	const hoverAnimDuration = 400;
 	const flipAnimDuration = 600;
-	let positionY = tweened(tile.position.y, {duration: hoverAnimDuration, easing: quartOut});
-	let height = tweened(defaultHeight, {duration: hoverAnimDuration, easing: quartOut});
-	let scale = tweened(1, {duration: hoverAnimDuration, easing: quartOut});
-	let rotationX = tweened(0, {duration: flipAnimDuration, easing: quadInOut});
+	let positionY = tweened(tile.position.y, { duration: hoverAnimDuration, easing: quartOut });
+	let height = tweened(defaultHeight, { duration: hoverAnimDuration, easing: quartOut });
+	let scale = tweened(1, { duration: hoverAnimDuration, easing: quartOut });
+	let rotationX = tweened(0, { duration: flipAnimDuration, easing: quadInOut });
 
 	interactivity();
 
 	$: {
-		if (tile.tileType === 'default') { color = 'lightgrey'; rotationX.set(0, {duration: 0})};
-		if (tile.tileType === 'residential') setTimeout(() => {color = '#72d772'}, flipAnimDuration * .75);
-		if (tile.tileType === 'commercial') setTimeout(() => {color = '#6ca7c9'}, flipAnimDuration * .75);
-		if (tile.tileType === 'industrial') setTimeout(() => {color = '#9c7c56'}, flipAnimDuration * .75);
+		if (tile.tileType === 'default') {
+			color = 'lightgrey';
+			rotationX.set(0, { duration: 0 });
+		}
+		if (tile.tileType === 'residential')
+			setTimeout(() => {
+				color = '#72d772';
+			}, flipAnimDuration * 0.75);
+		if (tile.tileType === 'commercial')
+			setTimeout(() => {
+				color = '#6ca7c9';
+			}, flipAnimDuration * 0.75);
+		if (tile.tileType === 'industrial')
+			setTimeout(() => {
+				color = '#9c7c56';
+			}, flipAnimDuration * 0.75);
 		if (tile.tileType === 'power plant') color = '#df3e3e';
 	}
 
@@ -43,10 +55,13 @@
 	}
 
 	function handleEnter() {
-		if(tile.tileType === 'default') {
-			positionY.set(.2);
-			height.set($height + .2);
-			scale.set($scale + .04);
+		if (tile.tileType === 'default') {
+			positionY.set(0.2);
+			height.set($height + 0.2);
+			scale.set($scale + 0.04);
+			if ($zoneQueue[$zoneQueue.length - 1] === 'residential') color = '#aaf0aa';
+			if ($zoneQueue[$zoneQueue.length - 1] === 'commercial') color = '#a9d1e8';
+			if ($zoneQueue[$zoneQueue.length - 1] === 'industrial') color = '#d4b998';
 		}
 	}
 
@@ -54,6 +69,7 @@
 		positionY.set(tile.position.y);
 		height.set(defaultHeight);
 		scale.set(1);
+		if(tile.tileType === 'default') color = 'lightgrey';
 	}
 </script>
 
@@ -63,7 +79,7 @@
 	position={[tile.position.x, $positionY, tile.position.z]}
 	on:click={() => handleClick()}
 	on:pointerenter={() => handleEnter()}
-	on:pointerleave={() => handleLeave()}	
+	on:pointerleave={() => handleLeave()}
 >
 	<T.CylinderGeometry args={[5, 5, $height, 6, 1]} />
 	<T.MeshStandardMaterial {color} />

@@ -12,7 +12,7 @@
 
     $: if($zoneQueue.length === 0 && $gameState === 'in progress') {
         gameState.set('finished');
-        dialog?.showModal();
+        setTimeout(() => dialog?.showModal(), 400);
     };
 
     function clearCurrentGame() {
