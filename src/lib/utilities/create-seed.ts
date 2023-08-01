@@ -1,4 +1,4 @@
-import approvedSeeds from "./approve-seeds";
+import approvedSeeds from "../data/approve-seeds";
 
 function createSeed(): string {
     const firstWord = approvedSeeds.firstWords[Math.round(Math.random() * approvedSeeds.firstWords.length)];
