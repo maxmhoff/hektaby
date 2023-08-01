@@ -1,12 +1,9 @@
-export type TileType = 'default' | 'commercial' | 'industrial' | 'residential' | 'school' | 'power plant';
+export type TileType = 'default' | 'commercial' | 'industrial' | 'residential' | 'park' | 'power plant' | 'forrest' | 'ocean' | 'mountain';
 
 type Tile = {
     index: number,
     tileType: TileType,
-    position: {
-        x: number,
-        y: number,
-    },
+    position: THREE.Vector3,
     adjacentTiles: number[],
     value: number,
 };

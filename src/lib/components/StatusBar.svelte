@@ -45,7 +45,9 @@
 	@use '../styles/variables.scss' as *;
 
 	.status-bar {
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 500px;
 		margin-top: 2rem;
 		margin-left: auto;
