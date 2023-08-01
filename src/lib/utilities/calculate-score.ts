@@ -1,6 +1,6 @@
 import type Tile from '$lib/types/tile';
 
-function calculateScore(tiles: Tile[]): number {
+function calculateScore(tiles: Tile[]): { score: number, updatedTiles: Tile[] } {
 	let sumScore = 0;
 	tiles.forEach((tile) => {
 		let tileScore = 0;
@@ -76,7 +76,7 @@ function calculateScore(tiles: Tile[]): number {
 		sumScore += tileScore;
 	});
 
-	return sumScore;
+	return {score: sumScore, updatedTiles: tiles };
 }
 
 export default calculateScore;

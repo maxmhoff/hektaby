@@ -50,7 +50,9 @@
 				zoneQueue.set(tempZoneQueue);
 				rotationX.set($rotationX + DEG2RAD * 180);
 			}
-			score.set(calculateScore($tiles));
+			const calcObject = calculateScore($tiles);
+			score.set(calcObject.score);
+			tiles.set(calcObject.updatedTiles);
 		}
 	}
 
@@ -69,7 +71,7 @@
 		positionY.set(tile.position.y);
 		height.set(defaultHeight);
 		scale.set(1);
-		if(tile.tileType === 'default') color = 'lightgrey';
+		if (tile.tileType === 'default') color = 'lightgrey';
 	}
 </script>
 
@@ -81,6 +83,20 @@
 	on:pointerenter={() => handleEnter()}
 	on:pointerleave={() => handleLeave()}
 >
+	<HTML><p class="tile__score">{tile.value}</p></HTML>
 	<T.CylinderGeometry args={[5, 5, $height, 6, 1]} />
 	<T.MeshStandardMaterial {color} />
 </T.Mesh>
+
+<style lang="scss">
+	@use '../../styles/variables.scss' as *;
+
+	.tile {
+		&__score {
+			font-size: $text-sm;
+			color: white;
+			transform: translate(-50%, -50%);
+			pointer-events: none;
+		}
+	}
+</style>

@@ -1,9 +1,13 @@
 <script>
-	import { OrbitControls } from '@threlte/extras';
 	import { T } from '@threlte/core';
 </script>
 
-
-<T.PerspectiveCamera makeDefault fov={50} position={[0, 40, 60]}>
-	<OrbitControls enableDamping />
-</T.PerspectiveCamera>
+<T.PerspectiveCamera
+	makeDefault
+	fov={50}
+	position.y={87}
+	position.z={35}
+	on:create={({ ref }) => {
+		ref.lookAt(0, -20, -10);
+	}}
+/>
