@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { currentGame } from '$lib/stores/gameStore';
+	import { score, seed, zoneQueue } from '$lib/stores/gameStore';
 	import '$lib/styles/variables.scss';
 	import TileIcon from './TileIcon.svelte';
-
-	export let seed: string;
-
-	$: seed;
 
 	function capitalize(str: string) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -20,18 +16,18 @@
 </script>
 
 <div class="status-bar">
-	<p class="status-bar__title">{formatSeed(seed)}</p>
+	<p class="status-bar__title">{formatSeed($seed)}</p>
 	<div class="status-bar__row">
-		<p class="status-bar__score">{$currentGame.score}</p>
-		{#if $currentGame.zoneQueue}
+		<p class="status-bar__score">{$score}</p>
+		{#if $zoneQueue}
 			<ul class="status-bar__queue">
-				{#each $currentGame.zoneQueue as zone, idx}
+				{#each $zoneQueue as zone, idx}
 					<li
 						class={`status-bar__queue-item status-bar__queue-item--${zone} ${
-							idx === $currentGame.zoneQueue.length - 1 ? 'status-bar__queue-item--last' : ''
+							idx === $zoneQueue.length - 1 ? 'status-bar__queue-item--last' : ''
 						}`}
 					>
-						{#if idx === $currentGame.zoneQueue.length - 1}
+						{#if idx === $zoneQueue.length - 1}
 							<TileIcon tileType={zone} />
 						{/if}
 					</li>
@@ -48,10 +44,8 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 500px;
+		width: 100vw;
 		margin-top: 2rem;
-		margin-left: auto;
-		margin-right: auto;
         padding: 0 1rem;
 
 		&__title {

@@ -1,29 +1,11 @@
 <script lang="ts">
-	import StatusBar from '$lib/components/StatusBar.svelte';
-	import { Canvas } from '@threlte/core';
 	import type { PageData } from './$types';
-	import Camera from '$lib/components/3d-experience/Camera.svelte';
-	import Lighting from '$lib/components/3d-experience/Lighting.svelte';
-	import HexagonGrid from '$lib/components/3d-experience/HexagonGrid.svelte';
+	import Game from '$lib/components/3d-experience/Game.svelte';
+	import { seed } from '$lib/stores/gameStore';
 
 	export let data: PageData;
+
+	seed.set(data.seed);
 </script>
 
-<div class="canvas-wrapper">
-	<StatusBar seed={data.seed} />
-	<Canvas>
-		<Camera />
-		<Lighting />
-		<HexagonGrid seed={data.seed} />
-	</Canvas>
-</div>
-
-<style lang="scss">
-	.canvas-wrapper {
-		position: relative;
-		margin-left: auto;
-		margin-right: auto;
-		width: 100vw;
-		height: 100vh;
-	}
-</style>
+<Game />

@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { currentGame } from '$lib/stores/gameStore';
+	import { score, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import type Tile from '$lib/types/tile';
+	import calculateScore from '$lib/utilities/calculate-score';
 	import { T } from '@threlte/core'
     import { interactivity } from '@threlte/extras'
     
 	export let tile: Tile;
 
 	let color = 'grey';
-	let rotationX = 0;
 
 	interactivity();
 
@@ -20,17 +20,21 @@
 	}
 
 	function handleClick() {
-		const tempZoneQueue = $currentGame.zoneQueue
-		const nextZone = tempZoneQueue.pop()
-		if (nextZone) {
-			tile.tileType = nextZone;
+		if(tile.tileType === 'default') {
+			const tempZoneQueue = $zoneQueue
+			const nextZone = tempZoneQueue.pop()
+			if (nextZone) {
+				tile.tileType = nextZone;
+				zoneQueue.set(tempZoneQueue);
+			}
+			score.set(calculateScore($tiles));
 		}
 	}
 </script>
 
 
-<T.Mesh rotation.x={rotationX} position={[tile.position.x, tile.position.y, tile.position.z]} on:click={() => handleClick()}>
-    <T.CylinderGeometry args={[5, 5, 0.4, 6]} />
+<T.Mesh position={[tile.position.x, tile.position.y, tile.position.z]} on:click={() => handleClick()}>
+    <T.CylinderGeometry args={[5, 5, 0.4, 6, 1]} />
     <T.MeshStandardMaterial {color} />
 </T.Mesh>
 

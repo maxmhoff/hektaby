@@ -1,22 +1,70 @@
 <script lang="ts">
-	import predefinedTiles from "$lib/data/predefined-tiles";
-	import GridTile from "$lib/components/3d-experience/GridTile.svelte";
-	import { onMount } from "svelte";
-	import type Tile from "$lib/types/tile";
-	import deepCloneArray from "$lib/utilities/deepclone-array";
+	import predefinedTiles from '$lib/data/predefined-tiles';
+	import GridTile from '$lib/components/3d-experience/GridTile.svelte';
+	import deepCloneArray from '$lib/utilities/deepclone-array';
+	import generateSeededRandom from '$lib/utilities/generate-seeded-random';
+	import shuffleArray from '$lib/utilities/shuffle-array';
+	import type { TileType } from '$lib/types/tile';
+	import { gameState, seed, specialZones, tiles, zoneQueue } from '$lib/stores/gameStore';
+	import { onMount } from 'svelte';
+    let seedFragments: string[] = [];
 
-    export let seed: string;
+	$: if($gameState === 'loading') initializeGrid();
 
-    let tiles: Tile[] = [];
+    onMount(() => initializeGrid());
 
-    onMount(() => initializeGrid())
+	export function initializeGrid() {
+		seedFragments = $seed.split('-');
+		tiles.set(deepCloneArray(predefinedTiles));
+		const missingTiles = Math.round(generateSeededRandom(seedFragments[0]) * 3) + 2;
+		Array.from({ length: missingTiles }, () => removeTile());
+		zoneQueue.set(createZoneQueue());
+		$tiles[Math.round(generateSeededRandom(seedFragments[1]) * ($tiles.length - 1))].tileType =
+			'power plant';
+		gameState.set('in progress');
+	}
 
-    function initializeGrid() {
-        tiles = deepCloneArray(predefinedTiles);
-    }
-    
+	function createZoneQueue(): TileType[] {
+		const zoneQueue: TileType[] = [];
+		const availableTiles = $tiles.length - $specialZones;
+		const seedValue = generateSeededRandom(seedFragments[1]);
+
+		const residentialTiles = Math.round(seedValue * (availableTiles - 3)) + 1;
+		const commercialTiles = Math.round(seedValue * (availableTiles - residentialTiles - 2)) + 1;
+		const industrialTiles = availableTiles - residentialTiles - commercialTiles;
+
+		zoneQueue.push(...Array(residentialTiles).fill('residential'));
+		zoneQueue.push(...Array(commercialTiles).fill('commercial'));
+		zoneQueue.push(...Array(industrialTiles).fill('industrial'));
+
+		shuffleArray(zoneQueue);
+		return zoneQueue;
+	}
+
+	function removeTile() {
+		const tilesThatCanBeRemoved = $tiles.filter((tile) =>
+			tile.adjacentTiles.some((adjacentTileIdx) =>
+				$tiles.some((item) => item.index === adjacentTileIdx)
+			)
+		);
+
+		const missingTileIndex = Math.round(
+			generateSeededRandom(seedFragments[2]) * tilesThatCanBeRemoved.length
+		);
+		const tileToRemove = tilesThatCanBeRemoved[missingTileIndex];
+
+		if (tileToRemove) {
+			const tileIndex = tileToRemove.index;
+			$tiles.forEach(
+				(tile) => (tile.adjacentTiles = tile.adjacentTiles.filter((idx) => idx !== tileIndex))
+			);
+			tiles.set($tiles.filter((tile) => tile.index !== tileToRemove.index));
+		} else {
+			removeTile();
+		}
+	}
 </script>
 
-{#each tiles as tile}
-    <GridTile tile={tile} />
+{#each $tiles as tile}
+	<GridTile {tile} />
 {/each}

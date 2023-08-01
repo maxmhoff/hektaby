@@ -1,4 +1,3 @@
-import { currentGame } from '$lib/stores/gameStore';
 import type Tile from '$lib/types/tile';
 
 function calculateScore(tiles: Tile[]): number {
