@@ -45,6 +45,7 @@
 		tiles[specialTileNumber].tileType = 'power plant';
 		createZoneQueue();
 		currentGame.set({
+			gameState: 'in progress',
 			score: 0,
 			specialZones: 1,
 			zoneQueue: [...zoneQueue],

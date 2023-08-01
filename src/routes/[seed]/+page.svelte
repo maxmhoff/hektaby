@@ -21,10 +21,9 @@
 <style lang="scss">
 	.canvas-wrapper {
 		position: relative;
-		margin-top: 2rem;
 		margin-left: auto;
 		margin-right: auto;
-		width: 500px;
-		height: 700px;
+		width: 100vw;
+		height: 100vh;
 	}
 </style>

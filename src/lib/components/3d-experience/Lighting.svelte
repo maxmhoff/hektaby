@@ -2,4 +2,5 @@
 	import { T } from '@threlte/core';
 </script>
 
-<T.DirectionalLight position={[10, 5, 5]} castShadow />
+<T.AmbientLight intensity={.3} />
+<T.DirectionalLight position={[5, 5, 5]} intensity={1} castShadow />
