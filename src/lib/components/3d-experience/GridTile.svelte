@@ -93,10 +93,12 @@
 
 	.tile {
 		&__score {
+			position: absolute;
 			font-size: $text-sm;
 			color: white;
 			transform: translate(-50%, -50%);
 			pointer-events: none;
+			user-select: none;
 		}
 	}
 </style>
