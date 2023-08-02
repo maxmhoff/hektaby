@@ -27,17 +27,17 @@
 	function createZoneQueue(): TileType[] {
 		const zoneQueue: TileType[] = [];
 		const availableTiles = $tiles.length - $specialZones;
-		const seedValue = generateSeededRandom(seedFragments[1]);
+		const seedValue = generateSeededRandom($seed);
 
 		const residentialTiles = Math.round(seedValue * (availableTiles - 5)) + 1;
-		const commercialTiles = Math.round(seedValue * (availableTiles - residentialTiles - 4)) + 1;
+		const commercialTiles = Math.round(seedValue * (availableTiles - residentialTiles - 3)) + 1;
 		const industrialTiles = availableTiles - residentialTiles - commercialTiles;
 
 		zoneQueue.push(...Array(residentialTiles).fill('residential'));
 		zoneQueue.push(...Array(commercialTiles).fill('commercial'));
 		zoneQueue.push(...Array(industrialTiles).fill('industrial'));
 
-		shuffleArray(zoneQueue);
+		shuffleArray(zoneQueue, seedFragments[2]);
 		return zoneQueue;
 	}
 

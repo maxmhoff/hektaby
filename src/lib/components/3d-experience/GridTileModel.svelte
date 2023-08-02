@@ -33,6 +33,10 @@
 			rotation={[0, 0, -Math.PI / 2]}
 			scale={[0.571, 0.511, 0.571]}
 		/>
+        <T.Mesh
+			geometry={$house.nodes.Foundation.geometry}
+			material={$house.nodes.Foundation.material}
+		/>
 		<T.Mesh
 			geometry={$house.nodes.House.geometry}
 			material={$house.nodes.House.material}
@@ -42,9 +46,17 @@
 			material={$house.nodes.Roof.material}
 			scale={[2, 1.75, 3.5]}
 		/>
+        <T.Mesh
+			geometry={$house.nodes.Stairs.geometry}
+			material={$house.nodes.Stairs.material}
+		/>
 		<T.Mesh
 			geometry={$house.nodes.Windows.geometry}
 			material={$house.nodes.Windows.material}
+		/>
+        <T.Mesh
+			geometry={$house.nodes.Window_Frames.geometry}
+			material={$house.nodes.Window_Frames.material}
 		/>
 	</T.Group>
 {/if}
