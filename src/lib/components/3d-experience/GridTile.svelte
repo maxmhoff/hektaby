@@ -14,7 +14,6 @@
 	const defaultHeight = 0.4;
 	const hoverAnimDuration = 400;
 	const flipAnimDuration = 600;
-	let positionY = tweened(tile.position.y, { duration: hoverAnimDuration, easing: quartOut });
 	let height = tweened(defaultHeight, { duration: hoverAnimDuration, easing: quartOut });
 	let scale = tweened(1, { duration: hoverAnimDuration, easing: quartOut });
 	let rotationX = tweened(0, { duration: flipAnimDuration, easing: quadInOut });
@@ -58,8 +57,7 @@
 
 	function handleEnter() {
 		if (tile.tileType === 'default') {
-			positionY.set(0.2);
-			height.set($height + 0.2);
+			height.set($height + 0.4);
 			scale.set($scale + 0.04);
 			if ($zoneQueue[$zoneQueue.length - 1] === 'residential') color = '#aaf0aa';
 			if ($zoneQueue[$zoneQueue.length - 1] === 'commercial') color = '#a9d1e8';
@@ -68,7 +66,6 @@
 	}
 
 	function handleLeave() {
-		positionY.set(tile.position.y);
 		height.set(defaultHeight);
 		scale.set(1);
 		if (tile.tileType === 'default') color = 'lightgrey';
@@ -78,7 +75,7 @@
 <T.Mesh
 	scale={$scale}
 	rotation.x={$rotationX}
-	position={[tile.position.x, $positionY, tile.position.z]}
+	position={[tile.position.x, tile.position.y, tile.position.z]}
 	on:click={() => handleClick()}
 	on:pointerenter={() => handleEnter()}
 	on:pointerleave={() => handleLeave()}
