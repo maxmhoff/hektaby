@@ -29,8 +29,8 @@
 		const availableTiles = $tiles.length - $specialZones;
 		const seedValue = generateSeededRandom(seedFragments[1]);
 
-		const residentialTiles = Math.round(seedValue * (availableTiles - 3)) + 1;
-		const commercialTiles = Math.round(seedValue * (availableTiles - residentialTiles - 2)) + 1;
+		const residentialTiles = Math.round(seedValue * (availableTiles - 5)) + 1;
+		const commercialTiles = Math.round(seedValue * (availableTiles - residentialTiles - 4)) + 1;
 		const industrialTiles = availableTiles - residentialTiles - commercialTiles;
 
 		zoneQueue.push(...Array(residentialTiles).fill('residential'));
@@ -41,7 +41,7 @@
 		return zoneQueue;
 	}
 
-	function removeTile() {
+	function removeTile(i: number = 2) {
 		const tilesThatCanBeRemoved = $tiles.filter((tile) =>
 			tile.adjacentTiles.some((adjacentTileIdx) =>
 				$tiles.some((item) => item.index === adjacentTileIdx)
@@ -49,7 +49,7 @@
 		);
 
 		const missingTileIndex = Math.round(
-			generateSeededRandom(seedFragments[2]) * tilesThatCanBeRemoved.length
+			generateSeededRandom(seedFragments[i]) * tilesThatCanBeRemoved.length
 		);
 		const tileToRemove = tilesThatCanBeRemoved[missingTileIndex];
 
@@ -59,8 +59,8 @@
 				(tile) => (tile.adjacentTiles = tile.adjacentTiles.filter((idx) => idx !== tileIndex))
 			);
 			tiles.set($tiles.filter((tile) => tile.index !== tileToRemove.index));
-		} else {
-			removeTile();
+		} else if (i > 0) {
+			removeTile(i-1);
 		}
 	}
 </script>

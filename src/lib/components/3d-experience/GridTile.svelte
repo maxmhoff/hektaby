@@ -7,8 +7,11 @@
 	import { quadInOut, quartOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import { DEG2RAD } from 'three/src/math/MathUtils';
+	import GridTileModel from './GridTileModel.svelte';
 
 	export let tile: Tile;
+
+	let model: string;
 
 	let color = 'grey';
 	const defaultHeight = 0.4;
@@ -29,6 +32,7 @@
 			setTimeout(() => {
 				color = '#72d772';
 			}, flipAnimDuration * 0.75);
+		model = '3d-models/testmodel.gltf';
 		if (tile.tileType === 'commercial')
 			setTimeout(() => {
 				color = '#6ca7c9';
@@ -37,6 +41,7 @@
 			setTimeout(() => {
 				color = '#9c7c56';
 			}, flipAnimDuration * 0.75);
+		model = '3d-models/testmodel2.gltf';
 		if (tile.tileType === 'power plant') color = '#df3e3e';
 	}
 
@@ -72,18 +77,25 @@
 	}
 </script>
 
-<T.Mesh
+<T.Group
 	scale={$scale}
 	rotation.x={$rotationX}
 	position={[tile.position.x, tile.position.y, tile.position.z]}
-	on:click={() => handleClick()}
-	on:pointerenter={() => handleEnter()}
-	on:pointerleave={() => handleLeave()}
 >
-	<HTML><p class="tile__score">{tile.value}</p></HTML>
-	<T.CylinderGeometry args={[5, 5, $height, 6, 1]} />
-	<T.MeshStandardMaterial {color} />
-</T.Mesh>
+	<T.Mesh
+		on:click={() => handleClick()}
+		on:pointerenter={() => handleEnter()}
+		on:pointerleave={() => handleLeave()}
+	>
+		{#if tile.tileType !== 'power plant' && tile.tileType !== 'default'}<HTML
+				><p class="tile__score">{tile.value}</p></HTML
+			>{/if}
+		<T.CylinderGeometry args={[5, 5, $height, 6, 1]} />
+		<T.MeshStandardMaterial {color} />
+	</T.Mesh>
+
+	<GridTileModel tileType={tile.tileType} {defaultHeight} />
+</T.Group>
 
 <style lang="scss">
 	@use '../../styles/variables.scss' as *;
@@ -91,7 +103,7 @@
 	.tile {
 		&__score {
 			position: absolute;
-			font-size: $text-sm;
+			font-size: $text-md;
 			color: white;
 			transform: translate(-50%, -50%);
 			pointer-events: none;

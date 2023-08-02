@@ -1,39 +1,38 @@
 <script lang="ts">
-	import { Canvas } from "@threlte/core";
-    import StatusBar from "../StatusBar.svelte";
-	import Camera from "$lib/components/3d-experience/Camera.svelte";
-	import Lighting from "$lib/components/3d-experience/Lighting.svelte";
-	import HexagonGrid from "$lib/components/3d-experience/HexagonGrid.svelte";
-	import { gameState, score, seed, tiles, zoneQueue } from "$lib/stores/gameStore";
-	import { goto } from "$app/navigation";
-	import createSeed from "$lib/utilities/create-seed";
-    let dialog: HTMLDialogElement;
-    let hexagonGrid;
+	import { Canvas } from '@threlte/core';
+	import StatusBar from '../StatusBar.svelte';
+	import Camera from '$lib/components/3d-experience/Camera.svelte';
+	import Lighting from '$lib/components/3d-experience/Lighting.svelte';
+	import HexagonGrid from '$lib/components/3d-experience/HexagonGrid.svelte';
+	import { gameState, score, seed, tiles, zoneQueue } from '$lib/stores/gameStore';
+	import { goto } from '$app/navigation';
+	import createSeed from '$lib/utilities/create-seed';
+	let dialog: HTMLDialogElement;
 
-    $: if($zoneQueue.length === 0 && $gameState === 'in progress') {
-        gameState.set('finished');
-        setTimeout(() => dialog?.showModal(), 400);
-    };
+	$: if ($zoneQueue.length === 0 && $gameState === 'in progress') {
+		gameState.set('finished');
+		setTimeout(() => dialog?.showModal(), 400);
+	}
 
-    function clearCurrentGame() {
+	function clearCurrentGame() {
 		tiles.set([]);
-        score.set(0);
+		score.set(0);
 		zoneQueue.set([]);
 	}
 
-    function startNewGame() {
-        dialog.close();
+	function startNewGame() {
+		dialog.close();
 		clearCurrentGame();
 		seed.set(createSeed());
 		goto(`/${$seed}`);
-        gameState.set('loading');
+		gameState.set('loading');
 	}
 
-    function resetCurrentGame() {
-        dialog.close();
-        clearCurrentGame();
-        gameState.set('loading')
-    }
+	function resetCurrentGame() {
+		dialog.close();
+		clearCurrentGame();
+		gameState.set('loading');
+	}
 </script>
 
 <div class="game">
@@ -41,13 +40,13 @@
 	<Canvas>
 		<Camera />
 		<Lighting />
-		<HexagonGrid bind:this={hexagonGrid} />
+		<HexagonGrid />
 	</Canvas>
 	<dialog bind:this={dialog}>
-        <p>Your final score was: {$score}</p>
-        <button on:click={() => startNewGame()}>New Game</button>
-        <button on:click={() => resetCurrentGame()}>Try Again</button>
-    </dialog>
+		<p>Your final score was: {$score}</p>
+		<button on:click={() => startNewGame()}>New Game</button>
+		<button on:click={() => resetCurrentGame()}>Try Again</button>
+	</dialog>
 </div>
 
 <style lang="scss">

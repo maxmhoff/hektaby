@@ -3,4 +3,4 @@
 </script>
 
 <T.AmbientLight intensity={.3} />
-<T.DirectionalLight position={[-5, 10, -10]} intensity={1} castShadow />
+<T.DirectionalLight position={[0, 15, 10]} intensity={1} castShadow />
