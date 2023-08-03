@@ -6,6 +6,7 @@ type Tile = {
     position: THREE.Vector3,
     adjacentTiles: number[],
     value: number,
+    state: 'default' | 'highlight' | 'active';
 };
 
 export default Tile;
