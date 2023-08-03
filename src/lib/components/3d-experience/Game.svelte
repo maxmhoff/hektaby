@@ -7,6 +7,7 @@
 	import { gameState, score, seed, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import { goto } from '$app/navigation';
 	import createSeed from '$lib/utilities/create-seed';
+	import Island from './Island.svelte';
 	let dialog: HTMLDialogElement;
 
 	$: if ($zoneQueue.length === 0 && $gameState === 'in progress') {
@@ -42,6 +43,7 @@
 	<Canvas>
 		<Camera />
 		<Lighting />
+		<Island />
 		<HexagonGrid />
 	</Canvas>
 	<dialog class="game__end-dialog" bind:this={dialog}>
