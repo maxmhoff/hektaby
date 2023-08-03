@@ -85,6 +85,11 @@
 			material={$shop.nodes.Roof.material}
 			scale={[3.93, 1.06, 6.35]}
 		/>
+		<T.Mesh
+			geometry={$shop.nodes.Window.geometry}
+			material={$shop.nodes.Window.material}
+			scale={[3.7, 3.4, 6]}
+		/>
 	</T.Group>
 {/if}
 
