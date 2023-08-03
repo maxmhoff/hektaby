@@ -11,12 +11,13 @@
 	const house = useGltf(`${path}house.gltf`, { useDraco: true });
 	const shop = useGltf(`${path}shop.gltf`, { useDraco: true });
 	const factory = useGltf(`${path}factory.gltf`, { useDraco: true });
+	const powerPlant = useGltf(`${path}power-plant.gltf`, { useDraco: true });
 </script>
 
 <!-- https://gltf.pmnd.rs/ to get scale & rotation of individual meshes -->
 {#if tileType === 'residential' && $house}
 	<T.Group
-		position.y={-defaultHeight}
+		position.y={-defaultHeight / 2}
 		scale={0.5}
 		rotation.y={DEG2RAD * (-70 + Math.random() * 40)}
 		rotation.z={DEG2RAD * 180}
@@ -85,7 +86,7 @@
 
 {#if tileType === 'commercial' && $shop}
 	<T.Group
-		position.y={-defaultHeight}
+		position.y={-defaultHeight / 2}
 		scale={0.28}
 		rotation.y={DEG2RAD * (110 + Math.random() * 40)}
 		rotation.z={DEG2RAD * 180}
@@ -137,7 +138,7 @@
 
 {#if tileType === 'industrial' && $factory}
 	<T.Group
-		position.y={-defaultHeight}
+		position.y={-defaultHeight / 2}
 		scale={0.28}
 		rotation.y={DEG2RAD * (110 + Math.random() * 40)}
 		rotation.z={DEG2RAD * 180}
@@ -173,16 +174,54 @@
 	</T.Group>
 {/if}
 
-{#if tileType === 'power plant'}
-	<GLTF
-		receiveShadow
-		castShadow
+{#if tileType === 'power plant' && $powerPlant}
+	<T.Group
 		scale={0.6}
-		position.x={-1.2}
-		position.y={defaultHeight}
-		position.z={1.3}
-		rotation.y={DEG2RAD * 130}
-		useDraco
-		url={`${path}power-plant.gltf`}
-	/>
+		position.x={1.7}
+		position.y={defaultHeight / 2}
+		position.z={-.5}
+		rotation.y={DEG2RAD * -60}
+	>
+		<T.Mesh
+			castShadow
+			receiveShadow
+			geometry={$powerPlant.nodes.Building.geometry}
+			material={$powerPlant.nodes.Building.material}
+			position={[1, 2, 0]}
+			scale={[3, 2, 2]}
+		/>
+		<T.Mesh
+			castShadow
+			receiveShadow
+			geometry={$powerPlant.nodes.Chimney.geometry}
+			material={$powerPlant.nodes.Chimney.material}
+			position={[0, 4, 6]}
+			scale={1.591}
+		/>
+		<T.Mesh
+			castShadow
+			receiveShadow
+			geometry={$powerPlant.nodes.Pipe.geometry}
+			material={$powerPlant.nodes.Pipe.material}
+			position={[0, 1.91, 4.75]}
+			rotation={[Math.PI / 2, 0, 0]}
+		/>
+
+		<T.Mesh
+			castShadow
+			receiveShadow
+			geometry={$powerPlant.nodes.Ring.geometry}
+			material={$powerPlant.nodes.Ring.material}
+			position={[0, 4, 6]}
+			scale={1.591}
+		/>
+		<T.Mesh
+			castShadow
+			receiveShadow
+			geometry={$powerPlant.nodes.Windows.geometry}
+			material={$powerPlant.nodes.Windows.material}
+			position={[1, 2, 0]}
+			scale={[3, 2, 2]}
+		/>
+	</T.Group>
 {/if}

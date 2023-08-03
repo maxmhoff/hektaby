@@ -2,7 +2,7 @@
 	import { T } from '@threlte/core';
 </script>
 
-<T.AmbientLight intensity={0.5} />
+<T.AmbientLight intensity={0.6} />
 <T.DirectionalLight
 	position={[0, 14, 10]}
 	intensity={.8}

@@ -8,6 +8,8 @@
 	import { goto } from '$app/navigation';
 	import createSeed from '$lib/utilities/create-seed';
 	import Island from './Island.svelte';
+	import Skybox from './Skybox.svelte';
+
 	let dialog: HTMLDialogElement;
 
 	$: if ($zoneQueue.length === 0 && $gameState === 'in progress') {
@@ -43,6 +45,7 @@
 	<Canvas>
 		<Camera />
 		<Lighting />
+		<Skybox />
 		<Island />
 		<HexagonGrid />
 	</Canvas>

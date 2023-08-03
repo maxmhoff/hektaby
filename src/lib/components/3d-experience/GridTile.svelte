@@ -28,21 +28,21 @@
 	$: {
 		if (tile.state !== 'active') {
 			if (tile.tileType === 'default') {
-				color = 'lightgrey';
+				color = '#CCCCCC';
 				rotationX.set(0, { duration: 0 });
 			}
 			if (tile.tileType === 'residential')
 				setTimeout(() => {
-					color = '#72d772';
-				}, flipAnimDuration * 0.75);
+					color = '#4fbd4f';
+				}, flipAnimDuration * 0.6);
 			if (tile.tileType === 'commercial')
 				setTimeout(() => {
-					color = '#6ca7c9';
-				}, flipAnimDuration * 0.75);
+					color = '#5c9bbf';
+				}, flipAnimDuration * 0.6);
 			if (tile.tileType === 'industrial')
 				setTimeout(() => {
 					color = '#9c7c56';
-				}, flipAnimDuration * 0.75);
+				}, flipAnimDuration * 0.6);
 			if (tile.tileType === 'power plant') color = '#666666';
 		} else {
 			const nextZone = $zoneQueue[$zoneQueue.length - 1];

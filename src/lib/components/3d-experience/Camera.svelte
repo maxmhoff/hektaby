@@ -1,9 +1,9 @@
 <script>
 	import { gameState, tiles } from '$lib/stores/gameStore';
 	import { T } from '@threlte/core';
-	import { linear, quadIn, quadInOut, quadOut } from 'svelte/easing';
+	import { quadInOut, quadOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
-	let camera;
+	
 	const animDurationFast = 1000;
 	const animDurationSlow = 7000;
 	const defaultPosition = { x: 0, y: 72, z: 30 };
