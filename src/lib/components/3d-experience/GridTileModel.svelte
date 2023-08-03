@@ -2,7 +2,7 @@
 	import { T } from '@threlte/core';
 	import { GLTF, useGltf } from '@threlte/extras';
 	import type { TileType } from '$lib/types/tile';
-	import { DEG2RAD } from 'three/src/math/MathUtils';
+	import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils';
 	export let tileType: TileType;
 	export let defaultHeight: number;
 
@@ -121,10 +121,10 @@
 {#if tileType === 'power plant'}
 	<GLTF
 		scale={0.6}
-		position.x={-.75}
+		position.x={-1.2}
 		position.y={defaultHeight}
-		position.z={2}
-
+		position.z={1.3}
+		rotation.y={DEG2RAD * 130}
 		useDraco
 		url={`${path}power-plant.gltf`}
 	/>
