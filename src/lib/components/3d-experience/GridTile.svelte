@@ -13,9 +13,9 @@
 
 	export let tile: Tile;
 
-	let model: string;
-
+	let adjencyBonus: number;
 	let color = 'grey';
+
 	const defaultHeight = 0.4;
 	const hoverAnimDuration = 400;
 	const flipAnimDuration = 600;
@@ -35,7 +35,6 @@
 				setTimeout(() => {
 					color = '#72d772';
 				}, flipAnimDuration * 0.75);
-			model = '3d-models/testmodel.gltf';
 			if (tile.tileType === 'commercial')
 				setTimeout(() => {
 					color = '#6ca7c9';
@@ -44,13 +43,15 @@
 				setTimeout(() => {
 					color = '#9c7c56';
 				}, flipAnimDuration * 0.75);
-			model = '3d-models/testmodel2.gltf';
-			if (tile.tileType === 'power plant') color = '#df3e3e';
+			if (tile.tileType === 'power plant') color = '#666666';
 		} else {
 			const nextZone = $zoneQueue[$zoneQueue.length - 1];
 			if (nextZone === 'residential') color = '#aaf0aa';
 			if (nextZone === 'commercial') color = '#a9d1e8';
 			if (nextZone === 'industrial') color = '#d4b998';
+		}
+		if (tile.state === 'highlight') {
+			updateAdjacencyBonus();
 		}
 	}
 
@@ -106,18 +107,15 @@
 		scale.set(1);
 	}
 
-	function getAdjacencyBonus(): string {
-		const points = calculateAdjacencyBonus(tile);
-		if (points > 0) return `+${points}`;
-		if (points < 0) return `${points}`;
-		return '';
+	function updateAdjacencyBonus() {
+		adjencyBonus = calculateAdjacencyBonus(tile);
 	}
 
 </script>
 
 <T.Group
 	scale={$scale}
-	rotation.x={$rotationX}
+	rotation.x={tile.tileType !== 'power plant' ? $rotationX : 0}
 	position={[tile.position.x, tile.position.y, tile.position.z]}
 >
 	<T.Mesh
@@ -133,9 +131,13 @@
 				</p>
 			</HTML>
 		{/if}
-		{#if tile.state === 'highlight'}
+		{#if tile.state === 'highlight' && adjencyBonus !== 0}
 			<HTML>
-				<p class="tile__adjacency-bonus">{getAdjacencyBonus()}</p>
+				<p class={`tile__adjacency-bonus ${adjencyBonus > 0 ? 'tile__adjacency-bonus--positive' : 'tile__adjacency-bonus--negative'}`}>
+					{#if adjencyBonus > 0}<span>+{adjencyBonus}</span>
+					{:else}<span>{adjencyBonus}</span>
+					{/if}
+				</p>
 			</HTML>
 		{/if}
 	</T.Mesh>

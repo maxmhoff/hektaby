@@ -11,7 +11,9 @@
 
 	$: if ($zoneQueue.length === 0 && $gameState === 'in progress') {
 		gameState.set('finished');
-		setTimeout(() => dialog?.showModal(), 400);
+		setTimeout(() => {
+			dialog?.showModal();
+		}, 400);
 	}
 
 	function clearCurrentGame() {
@@ -42,8 +44,8 @@
 		<Lighting />
 		<HexagonGrid />
 	</Canvas>
-	<dialog bind:this={dialog}>
-		<p>Your final score was: {$score}</p>
+	<dialog class="game__end-dialog" bind:this={dialog}>
+		<p class="game__final-score">Your final score was: {$score}</p>
 		<button on:click={() => startNewGame()}>New Game</button>
 		<button on:click={() => resetCurrentGame()}>Try Again</button>
 	</dialog>
@@ -56,5 +58,13 @@
 		margin-right: auto;
 		width: 100vw;
 		height: 100vh;
+
+		&__end-dialog {
+			user-select: none;
+		}
+
+		&__final-score {
+			margin-bottom: 2rem;
+		}
 	}
 </style>

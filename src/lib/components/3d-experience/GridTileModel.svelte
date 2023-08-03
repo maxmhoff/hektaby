@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { useGltf } from '@threlte/extras';
+	import { GLTF, useGltf } from '@threlte/extras';
 	import type { TileType } from '$lib/types/tile';
 	import { DEG2RAD } from 'three/src/math/MathUtils';
 	export let tileType: TileType;
@@ -116,4 +116,16 @@
 			scale={[1.18, 0.57, 0.165]}
 		/>
 	</T.Group>
+{/if}
+
+{#if tileType === 'power plant'}
+	<GLTF
+		scale={0.6}
+		position.x={-.75}
+		position.y={defaultHeight}
+		position.z={2}
+
+		useDraco
+		url={`${path}power-plant.gltf`}
+	/>
 {/if}
