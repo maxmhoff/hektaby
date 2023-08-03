@@ -119,6 +119,7 @@
 	position={[tile.position.x, tile.position.y, tile.position.z]}
 >
 	<T.Mesh
+		receiveShadow
 		on:click={() => handleClick()}
 		on:pointerenter={() => handleEnter()}
 		on:pointerleave={() => handleLeave()}
