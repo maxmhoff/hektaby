@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { GLTF, useGltf } from '@threlte/extras';
+	import { useGltf } from '@threlte/extras';
 	import type { TileType } from '$lib/types/tile';
 	import { DEG2RAD } from 'three/src/math/MathUtils';
 	export let tileType: TileType;
@@ -179,7 +179,7 @@
 		scale={0.6}
 		position.x={1.7}
 		position.y={defaultHeight / 2}
-		position.z={-.5}
+		position.z={-0.5}
 		rotation.y={DEG2RAD * -60}
 	>
 		<T.Mesh

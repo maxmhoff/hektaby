@@ -6,7 +6,7 @@
 	
 	const animDurationFast = 1000;
 	const animDurationSlow = 7000;
-	const defaultPosition = { x: 0, y: 72, z: 30 };
+	const defaultPosition = { x: 0, y: 75, z: 30 };
 	const defaultRotationX = -1.1726917666035248;
 	const cameraPositionX = tweened(0, { duration: animDurationFast, easing: quadInOut });
 	const cameraPositionY = tweened(defaultPosition.y, { duration: animDurationFast, easing: quadInOut });

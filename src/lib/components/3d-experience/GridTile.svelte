@@ -12,6 +12,7 @@
 	import calculateAdjacencyBonus from '$lib/utilities/calculate-adjacency-bonus';
 
 	export let tile: Tile;
+	export let boardPositionY: number;
 
 	let adjencyBonus: number;
 	let color = 'grey';
@@ -116,7 +117,7 @@
 <T.Group
 	scale={$scale}
 	rotation.x={tile.tileType !== 'power plant' ? $rotationX : 0}
-	position={[tile.position.x, tile.position.y, tile.position.z]}
+	position={[tile.position.x, boardPositionY + $height / 2, tile.position.z]}
 >
 	<T.Mesh
 		receiveShadow

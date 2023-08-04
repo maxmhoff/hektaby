@@ -7,9 +7,18 @@
 	import type { TileType } from '$lib/types/tile';
 	import { gameState, seed, specialZones, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import { onMount } from 'svelte';
+	import { quadInOut } from 'svelte/easing';
+	import { tweened } from 'svelte/motion';
     let seedFragments: string[] = [];
+	const defaultBoardPositionY = 4;
+	const boardPositionY = tweened(defaultBoardPositionY, {duration: 7000, easing: quadInOut})
 
 	$: if($gameState === 'loading') initializeGrid();
+	$: if($gameState === 'finished') {
+		boardPositionY.set(0);
+	} else {
+		boardPositionY.set(defaultBoardPositionY, {duration: 1000, easing: quadInOut});
+	}
 
     onMount(() => initializeGrid());
 
@@ -66,5 +75,5 @@
 </script>
 
 {#each $tiles as tile}
-	<GridTile {tile} />
+	<GridTile boardPositionY={$boardPositionY} {tile} />
 {/each}
