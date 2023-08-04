@@ -47,6 +47,8 @@
 		width: 100vw;
 		margin-top: 2rem;
         padding: 0 1rem;
+		pointer-events: none;
+		user-select: none;
 
 		&__title {
 			font-size: $text-lg;
