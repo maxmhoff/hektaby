@@ -1,7 +1,10 @@
 <script lang="ts">
+	import zoneColors from '$lib/data/zone-colors';
 	import { score, seed, zoneQueue } from '$lib/stores/gameStore';
 	import '$lib/styles/variables.scss';
+	import { error } from '@sveltejs/kit';
 	import TileIcon from './TileIcon.svelte';
+	import type { TileType } from '$lib/types/tile';
 
 	function capitalize(str: string) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -12,6 +15,12 @@
 		return `${capitalize(seedStringArray[0])} ${capitalize(seedStringArray[1])} ${capitalize(
 			seedStringArray[2]
 		)}`;
+	}
+
+	function getZoneColor(zone: TileType) {
+		if(zone === 'residential') return zoneColors.residential.base;
+		if(zone === 'commercial') return zoneColors.commercial.base;
+		if(zone === 'industrial') return zoneColors.industrial.base;
 	}
 </script>
 
@@ -26,6 +35,7 @@
 						class={`status-bar__queue-item status-bar__queue-item--${zone} ${
 							idx === $zoneQueue.length - 1 ? 'status-bar__queue-item--last' : ''
 						}`}
+						style={`background-color: ${getZoneColor(zone)}`}
 					>
 						{#if idx === $zoneQueue.length - 1}
 							<TileIcon tileType={zone} />
@@ -73,18 +83,6 @@
 			height: 2rem;
 			margin-top: 1.4rem;
 			background-color: black;
-
-			&--residential {
-				background-color: #72d772;
-			}
-
-			&--commercial {
-				background-color: #6ca7c9;
-			}
-
-			&--industrial {
-				background-color: #9c7c56;
-			}
 
 			&--last {
 				width: 4rem;

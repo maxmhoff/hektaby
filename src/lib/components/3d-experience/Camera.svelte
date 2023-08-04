@@ -1,22 +1,20 @@
 <script>
+	import animationSettings from '$lib/data/animation-settings';
 	import { gameState, tiles } from '$lib/stores/gameStore';
 	import { T } from '@threlte/core';
-	import { quadInOut, quadOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	
-	const animDurationFast = 1000;
-	const animDurationSlow = 7000;
-	const defaultPosition = { x: 0, y: 75, z: 30 };
+	const defaultPosition = { x: 0, y: 80, z: 30 };
 	const defaultRotationX = -1.1726917666035248;
-	const cameraPositionX = tweened(0, { duration: animDurationFast, easing: quadInOut });
-	const cameraPositionY = tweened(defaultPosition.y, { duration: animDurationFast, easing: quadInOut });
-	const cameraPositionZ = tweened(defaultPosition.z, { duration: animDurationFast, easing: quadInOut });
-	const cameraRotationX = tweened(defaultRotationX, { duration: animDurationFast, easing: quadInOut });
+	const cameraPositionX = tweened(0, animationSettings.gameStart);
+	const cameraPositionY = tweened(defaultPosition.y, animationSettings.gameStart);
+	const cameraPositionZ = tweened(defaultPosition.z, animationSettings.gameStart);
+	const cameraRotationX = tweened(defaultRotationX, animationSettings.gameStart);
 	$: {
 		if ($gameState === 'finished') {
-			cameraPositionY.set(20, {duration: animDurationSlow});
-			cameraPositionZ.set(40, {duration: animDurationSlow});
-			cameraRotationX.set(-.5, {duration: animDurationSlow});
+			cameraPositionY.set(20, animationSettings.gameFinished);
+			cameraPositionZ.set(40, animationSettings.gameFinished);
+			cameraRotationX.set(-.5, animationSettings.gameFinished);
 		} else {
 			cameraPositionX.set(0);
 			cameraPositionY.set(defaultPosition.y);
@@ -28,9 +26,9 @@
 	$: {
 		$tiles.forEach(tile => {
 			if(tile.state === 'active') {
-				cameraPositionX.set(tile.position.x / 3, {duration: 600, easing: quadOut});
-				cameraPositionZ.set(defaultPosition.z + tile.position.z / 3, {duration: 600, easing: quadOut});
-				cameraPositionY.set(defaultPosition.y + tile.position.z / 10, {duration: 600, easing: quadOut});
+				cameraPositionX.set(tile.position.x / 3, animationSettings.pan);
+				cameraPositionZ.set(defaultPosition.z + tile.position.z / 3, animationSettings.pan);
+				cameraPositionY.set(defaultPosition.y + tile.position.z / 10, animationSettings.pan);
 			}
 		})
 	}

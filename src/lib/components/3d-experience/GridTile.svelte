@@ -10,6 +10,8 @@
 	import GridTileModel from './GridTileModel.svelte';
 	import deepCloneArray from '$lib/utilities/deepclone-array';
 	import calculateAdjacencyBonus from '$lib/utilities/calculate-adjacency-bonus';
+	import zoneColors from '$lib/data/zone-colors';
+	import animationSettings from '$lib/data/animation-settings';
 
 	export let tile: Tile;
 	export let boardPositionY: number;
@@ -18,38 +20,35 @@
 	let color = 'grey';
 
 	const defaultHeight = 0.4;
-	const hoverAnimDuration = 400;
-	const flipAnimDuration = 600;
-	let height = tweened(defaultHeight, { duration: hoverAnimDuration, easing: quartOut });
-	let scale = tweened(1, { duration: hoverAnimDuration, easing: quartOut });
-	let rotationX = tweened(0, { duration: flipAnimDuration, easing: quadInOut });
-
+	let height = tweened(defaultHeight, animationSettings.hover);
+	let scale = tweened(1, animationSettings.hover);
+	let rotationX = tweened(0, animationSettings.flipTile);
 	interactivity();
 
 	$: {
 		if (tile.state !== 'active') {
 			if (tile.tileType === 'default') {
-				color = '#CCCCCC';
+				color = zoneColors.default.base;
 				rotationX.set(0, { duration: 0 });
 			}
 			if (tile.tileType === 'residential')
 				setTimeout(() => {
-					color = '#4fbd4f';
-				}, flipAnimDuration * 0.6);
+					color = zoneColors.residential.base;
+				}, animationSettings.flipTile.duration * 0.6);
 			if (tile.tileType === 'commercial')
 				setTimeout(() => {
-					color = '#5c9bbf';
-				}, flipAnimDuration * 0.6);
+					color = zoneColors.commercial.base;
+				}, animationSettings.flipTile.duration * 0.6);
 			if (tile.tileType === 'industrial')
 				setTimeout(() => {
-					color = '#9c7c56';
-				}, flipAnimDuration * 0.6);
-			if (tile.tileType === 'power plant') color = '#666666';
+					color = zoneColors.industrial.base;
+				}, animationSettings.flipTile.duration * 0.6);
+			if (tile.tileType === 'power plant') color = zoneColors.special.base;
 		} else {
 			const nextZone = $zoneQueue[$zoneQueue.length - 1];
-			if (nextZone === 'residential') color = '#aaf0aa';
-			if (nextZone === 'commercial') color = '#a9d1e8';
-			if (nextZone === 'industrial') color = '#d4b998';
+			if (nextZone === 'residential') color = zoneColors.residential.selected;
+			if (nextZone === 'commercial') color = zoneColors.commercial.selected;
+			if (nextZone === 'industrial') color = zoneColors.industrial.selected;
 		}
 		if (tile.state === 'highlight') {
 			updateAdjacencyBonus();

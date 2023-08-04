@@ -9,15 +9,16 @@
 	import { onMount } from 'svelte';
 	import { quadInOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
+	import animationSettings from '$lib/data/animation-settings';
     let seedFragments: string[] = [];
 	const defaultBoardPositionY = 4;
-	const boardPositionY = tweened(defaultBoardPositionY, {duration: 7000, easing: quadInOut})
+	const boardPositionY = tweened(defaultBoardPositionY, animationSettings.gameFinished)
 
 	$: if($gameState === 'loading') initializeGrid();
 	$: if($gameState === 'finished') {
 		boardPositionY.set(0);
 	} else {
-		boardPositionY.set(defaultBoardPositionY, {duration: 1000, easing: quadInOut});
+		boardPositionY.set(defaultBoardPositionY, animationSettings.gameStart);
 	}
 
     onMount(() => initializeGrid());
