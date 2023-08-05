@@ -3,7 +3,7 @@
 	import * as THREE from 'three';
 	const sunsetShader = {
 		uniforms: {
-			topColor: { value: new THREE.Color(0x8b72be) }, // Lavender
+			topColor: { value: new THREE.Color(0xb095e8) }, // Lavender
 			bottomColor: { value: new THREE.Color(0xffc0cb) }, // Pink
 			offset: { value: 30.0 },
 			exponent: { value: 0.6 }

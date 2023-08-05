@@ -7,8 +7,9 @@
 	import { gameState, score, seed, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import { goto } from '$app/navigation';
 	import createSeed from '$lib/utilities/create-seed';
-	import Island from './Island.svelte';
-	import Skybox from './Skybox.svelte';
+	import Island from '$lib/components/3d-experience/Island.svelte';
+	import Skybox from '$lib/components/3d-experience/Skybox.svelte';
+	import Water from '$lib/components/3d-experience/Water.svelte';
 
 	let dialog: HTMLDialogElement;
 
@@ -47,6 +48,7 @@
 		<Lighting />
 		<Skybox />
 		<Island />
+		<Water />
 		<HexagonGrid />
 	</Canvas>
 	<dialog class="game__end-dialog" bind:this={dialog}>

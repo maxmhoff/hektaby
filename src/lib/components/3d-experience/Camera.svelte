@@ -4,7 +4,7 @@
 	import { T } from '@threlte/core';
 	import { tweened } from 'svelte/motion';
 	
-	const defaultPosition = { x: 0, y: 80, z: 30 };
+	const defaultPosition = { x: 0, y: 80, z: 35 };
 	const defaultRotationX = -1.1726917666035248;
 	const cameraPositionX = tweened(0, animationSettings.gameStart);
 	const cameraPositionY = tweened(defaultPosition.y, animationSettings.gameStart);

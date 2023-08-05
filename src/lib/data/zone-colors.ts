@@ -1,6 +1,6 @@
 const zoneColors = {
     default: {
-        base: '#CCCCCC',
+        base: '#DDDDDD',
     },
     residential: {
         base: '#4fbd4f',
