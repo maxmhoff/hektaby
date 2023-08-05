@@ -4,9 +4,9 @@
 	const sunsetShader = {
 		uniforms: {
 			topColor: { value: new THREE.Color(0xb095e8) }, // Lavender
-			bottomColor: { value: new THREE.Color(0xffc0cb) }, // Pink
-			offset: { value: 30.0 },
-			exponent: { value: 0.6 }
+			bottomColor: { value: new THREE.Color(0xde99aa) }, // Pink
+			offset: { value: 40.0 },
+			exponent: { value: 1 }
 		},
 		vertexShader: `
     varying vec3 vWorldPosition;

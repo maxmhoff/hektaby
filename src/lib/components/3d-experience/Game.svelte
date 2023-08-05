@@ -68,6 +68,9 @@
 
 		&__end-dialog {
 			user-select: none;
+			&::backdrop {
+				background-color: transparent;
+			}
 		}
 
 		&__final-score {

@@ -4,6 +4,7 @@
 	import { DEG2RAD } from 'three/src/math/MathUtils';
 
 	const vertexShader = `
+		precision highp float;
 		varying vec2 vUv;
 		varying float yPosition;
 		uniform float time;
@@ -24,6 +25,7 @@
 	`;
 
 	const fragmentShader = `
+		precision highp float;
 		varying vec2 vUv;
 		varying float yPosition;
 
@@ -36,13 +38,18 @@
 		}
 	`;
 
-	let time = 0;
+	let time = performance.now() * 0.001; // Convert to seconds
 	const uniforms = { time: { value: time } };
 	const shaderMaterial = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
 	const geometry = new THREE.CircleGeometry(60, 60, 64, 64);
 
+	let lastFrameTime = performance.now();
 	useFrame(() => {
-		time += 0.02;
+		let currentFrameTime = performance.now();
+		let delta = (currentFrameTime - lastFrameTime) * 0.001; // Convert to seconds
+		lastFrameTime = currentFrameTime;
+
+		time += delta * 4; // Adjust the factor here as needed
 		shaderMaterial.uniforms.time.value = time;
 		shaderMaterial.needsUpdate = true;
 	});
