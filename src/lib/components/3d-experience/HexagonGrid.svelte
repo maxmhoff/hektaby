@@ -7,7 +7,6 @@
 	import type { TileType } from '$lib/types/tile';
 	import { gameState, seed, specialZones, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import { onMount } from 'svelte';
-	import { quadInOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import animationSettings from '$lib/data/animation-settings';
     let seedFragments: string[] = [];

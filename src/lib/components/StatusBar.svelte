@@ -25,7 +25,7 @@
 </script>
 
 <div class="status-bar">
-	<p class="status-bar__title">{formatSeed($seed)}</p>
+	<p class="status-bar__map-title">{formatSeed($seed)}</p>
 	<div class="status-bar__row">
 		<p class="status-bar__score">{$score}</p>
 		{#if $zoneQueue}
@@ -57,12 +57,17 @@
 		width: 100vw;
 		margin-top: 2rem;
         padding: 0 1rem;
+		color: white;
 		pointer-events: none;
 		user-select: none;
 
-		&__title {
-			font-size: $text-lg;
+		&__map-title {
+			font-size: $text-md;
 			margin-bottom: 1rem;
+
+			@media (min-width: $tablet) {
+				font-size: $text-lg;
+			}
 		}
 
         &__row {
