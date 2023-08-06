@@ -32,7 +32,7 @@
 		dialog.close();
 		clearCurrentGame();
 		seed.set(createSeed());
-		goto(`/${$seed}`);	
+		goto(`/${$seed}`);
 	}
 
 	function resetCurrentGame() {
@@ -52,10 +52,12 @@
 		<HexagonGrid />
 	</Canvas>
 	<ZoneQueue />
-	<dialog class="game__end-dialog" bind:this={dialog}>
+	<dialog class="game__dialog" bind:this={dialog}>
 		<p class="game__final-score">Your final score was: {$score}</p>
-		<button on:click={() => startNewGame()}>New Game</button>
-		<button on:click={() => resetCurrentGame()}>Try Again</button>
+		<div class="game__dialog-actions">
+			<button class="game__dialog-button" on:click={() => startNewGame()}>New Game</button>
+			<button class="game__dialog-button" on:click={() => resetCurrentGame()}>Try Again</button>
+		</div>
 	</dialog>
 </div>
 
@@ -68,8 +70,10 @@
 		height: 100vh;
 		overflow: hidden;
 
-		&__end-dialog {
+		&__dialog {
 			user-select: none;
+			background-color: #FFFFFFFE;
+			border-radius: 1rem;
 			&::backdrop {
 				background-color: transparent;
 			}
@@ -77,6 +81,23 @@
 
 		&__final-score {
 			margin-bottom: 2rem;
+		}
+
+		&__dialog-actions {
+			display: flex;
+			gap: 1rem;
+			justify-content: space-between;
+		}
+
+		&__dialog-button {
+			padding: 0.5rem 2rem;
+			border: 2px solid black;
+			border-radius: 1rem;
+			background: white;
+			&:hover, &:focus-visible {
+				color: white; 
+				background-color: black;
+			}
 		}
 	}
 </style>
