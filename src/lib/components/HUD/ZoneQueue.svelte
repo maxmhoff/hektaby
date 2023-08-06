@@ -37,6 +37,8 @@
         bottom: 3rem;
         width: 100%;
         padding: $container-padding;
+        pointer-events: none;
+        user-select: none;
 
 		&__list {
             width: fit-content;
