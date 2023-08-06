@@ -47,9 +47,5 @@
 				font-size: $text-lg;
 			}
 		}
-
-		&__score {
-			font-size: $text-sm;
-		}
 	}
 </style>

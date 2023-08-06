@@ -43,7 +43,7 @@
             margin-right: auto;
             margin-left: auto;
 			display: flex;
-            gap: 1rem;
+            gap: .5rem;
             justify-content: space-between;
 		}
 
