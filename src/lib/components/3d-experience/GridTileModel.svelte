@@ -24,7 +24,6 @@
 	>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Chimney.geometry}
 			material={$house.nodes.Chimney.material}
 			rotation={[-Math.PI, 0, -Math.PI]}
@@ -32,13 +31,11 @@
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Door.geometry}
 			material={$house.nodes.Door.material}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Door_Handle.geometry}
 			material={$house.nodes.Door_Handle.material}
 			rotation={[0, 0, -Math.PI / 2]}
@@ -46,38 +43,32 @@
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Foundation.geometry}
 			material={$house.nodes.Foundation.material}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.House.geometry}
 			material={$house.nodes.House.material}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Roof.geometry}
 			material={$house.nodes.Roof.material}
 			scale={[2, 1.75, 3.5]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Stairs.geometry}
 			material={$house.nodes.Stairs.material}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Windows.geometry}
 			material={$house.nodes.Windows.material}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$house.nodes.Window_Frames.geometry}
 			material={$house.nodes.Window_Frames.material}
 		/>
@@ -93,42 +84,36 @@
 	>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$shop.nodes.Cloth.geometry}
 			material={$shop.nodes.Cloth.material}
 			scale={[3.7, 3.4, 6]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$shop.nodes.Cloth_Alternate.geometry}
 			material={$shop.nodes.Cloth_Alternate.material}
 			scale={[3.7, 3.4, 6]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$shop.nodes.Door.geometry}
 			material={$shop.nodes.Door.material}
 			scale={[0.3, 2.02, 1.2]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$shop.nodes.House.geometry}
 			material={$shop.nodes.House.material}
 			scale={[3.7, 3.4, 6]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$shop.nodes.Roof.geometry}
 			material={$shop.nodes.Roof.material}
 			scale={[3.93, 1.06, 6.35]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$shop.nodes.Window.geometry}
 			material={$shop.nodes.Window.material}
 			scale={[3.7, 3.4, 6]}
@@ -145,28 +130,24 @@
 	>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$factory.nodes.Chimney.geometry}
 			material={$factory.nodes.Chimney.material}
 			scale={[0.91, 6.65, 1]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$factory.nodes.Chimney2.geometry}
 			material={$factory.nodes.Chimney2.material}
 			scale={[0.91, 4.54, 1]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$factory.nodes.Main.geometry}
 			material={$factory.nodes.Main.material}
 			scale={[7.5, 3, 4]}
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$factory.nodes.Windows.geometry}
 			material={$factory.nodes.Windows.material}
 			scale={[1.18, 0.57, 0.165]}
@@ -184,7 +165,6 @@
 	>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$powerPlant.nodes.Building.geometry}
 			material={$powerPlant.nodes.Building.material}
 			position={[1, 2, 0]}
@@ -192,7 +172,6 @@
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$powerPlant.nodes.Chimney.geometry}
 			material={$powerPlant.nodes.Chimney.material}
 			position={[0, 4, 6]}
@@ -200,7 +179,6 @@
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$powerPlant.nodes.Pipe.geometry}
 			material={$powerPlant.nodes.Pipe.material}
 			position={[0, 1.91, 4.75]}
@@ -209,7 +187,6 @@
 
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$powerPlant.nodes.Ring.geometry}
 			material={$powerPlant.nodes.Ring.material}
 			position={[0, 4, 6]}
@@ -217,7 +194,6 @@
 		/>
 		<T.Mesh
 			castShadow
-			receiveShadow
 			geometry={$powerPlant.nodes.Windows.geometry}
 			material={$powerPlant.nodes.Windows.material}
 			position={[1, 2, 0]}

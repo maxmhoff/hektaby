@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
-	import StatusBar from '../StatusBar.svelte';
+	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import Camera from '$lib/components/3d-experience/Camera.svelte';
 	import Lighting from '$lib/components/3d-experience/Lighting.svelte';
 	import HexagonGrid from '$lib/components/3d-experience/HexagonGrid.svelte';
@@ -10,6 +10,7 @@
 	import Island from '$lib/components/3d-experience/Island.svelte';
 	import Skybox from '$lib/components/3d-experience/Skybox.svelte';
 	import Water from '$lib/components/3d-experience/Water.svelte';
+	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';
 
 	let dialog: HTMLDialogElement;
 
@@ -24,20 +25,19 @@
 		tiles.set([]);
 		score.set(0);
 		zoneQueue.set([]);
+		gameState.set('loading');
 	}
 
 	function startNewGame() {
 		dialog.close();
 		clearCurrentGame();
 		seed.set(createSeed());
-		goto(`/${$seed}`);
-		gameState.set('loading');
+		goto(`/${$seed}`);	
 	}
 
 	function resetCurrentGame() {
 		dialog.close();
 		clearCurrentGame();
-		gameState.set('loading');
 	}
 </script>
 
@@ -51,6 +51,7 @@
 		<Water />
 		<HexagonGrid />
 	</Canvas>
+	<ZoneQueue />
 	<dialog class="game__end-dialog" bind:this={dialog}>
 		<p class="game__final-score">Your final score was: {$score}</p>
 		<button on:click={() => startNewGame()}>New Game</button>

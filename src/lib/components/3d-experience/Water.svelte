@@ -55,4 +55,4 @@
 	});
 </script>
 
-<T.Mesh position.y={-5} rotation.y={DEG2RAD * 180} {geometry} material={shaderMaterial} />
+<T.Mesh position.y={-2} rotation.y={DEG2RAD * 180} {geometry} material={shaderMaterial} />
