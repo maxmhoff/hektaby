@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { islandThemeColors } from '$lib/stores/gameStore';
+	import { islandTheme } from '$lib/stores/gameStore';
 	import { T, useFrame } from '@threlte/core';
 	import * as THREE from 'three';
 	import { DEG2RAD } from 'three/src/math/MathUtils';
@@ -8,8 +8,8 @@
 	let waterColorTwo: THREE.Color = new THREE.Color();
 
 	$: {
-		waterColorOne = new THREE.Color($islandThemeColors.waterColorOne);
-		waterColorTwo = new THREE.Color($islandThemeColors.waterColorTwo);
+		waterColorOne = new THREE.Color($islandTheme.colors.waterColorOne);
+		waterColorTwo = new THREE.Color($islandTheme.colors.waterColorTwo);
 	}
 
 	let time = performance.now() * 0.001; // Convert to seconds

@@ -6,9 +6,11 @@ export type IslandThemeColors = {
 	waterColorTwo: string;
 };
 
-export type IslandTheme = Record<string, { colors: IslandThemeColors; tags: string[] }>;
+export type IslandTheme = { colors: IslandThemeColors; tags: string[]; }
 
-const islandThemes: IslandTheme = {
+export type IslandThemes = Record<string, IslandTheme>;
+
+const islandThemes: IslandThemes = {
 	beach: {
 		colors: {
 			islandColor: '#96928d',
@@ -17,7 +19,7 @@ const islandThemes: IslandTheme = {
 			waterColorOne: '#4d8fdb',
 			waterColorTwo: '#77c5fd'
 		},
-		tags: ['blazing', 'hot', 'sunny']
+		tags: ['blazing', 'hot', 'sunny'],
 	},
 	exotic: {
 		colors: {
@@ -27,9 +29,19 @@ const islandThemes: IslandTheme = {
 			waterColorOne: '#50bfce',
 			waterColorTwo: '#aeeae9'
 		},
-		tags: ['exotic', 'tropical', 'warm']
+		tags: ['exotic', 'tropical', 'warm', 'crazy'],
 	},
-	siv: {
+    fuchsia: {
+        colors: {
+            islandColor: '#163345',
+            skyColorOne: '#131f76',
+            skyColorTwo: '#1e0b6b',
+            waterColorOne: '#5742f0',
+            waterColorTwo: '#e187f2',
+        },
+        tags: ['acid', 'fuchsia', 'breathtaking', 'majestic'],
+    },
+	charmeoffensiv: {
 		colors: {
 			islandColor: '#328b54',
 			skyColorOne: '#80a7e5',
@@ -37,7 +49,7 @@ const islandThemes: IslandTheme = {
 			waterColorOne: '#65c4d7',
 			waterColorTwo: '#96dfee'
 		},
-		tags: ['bright', 'chilly', 'foggy', 'marble', 'misty', 'mediterranean', 'quiet']
+		tags: ['bright', 'chilly', 'foggy', 'marble', 'misty', 'mediterranean', 'quiet'],
 	},
 	storm: {
 		colors: {
@@ -47,7 +59,7 @@ const islandThemes: IslandTheme = {
 			waterColorOne: '#6d9dd5',
 			waterColorTwo: '#90c1e4'
 		},
-		tags: ['cloudy', 'grey', 'stormy', 'thunderous', 'windy']
+		tags: ['cloudy', 'grey', 'stormy', 'thunderous', 'windy'],
 	},
 	sunset: {
 		colors: {
@@ -57,7 +69,7 @@ const islandThemes: IslandTheme = {
             waterColorOne: '#61abff',
             waterColorTwo: '#9cd6ff',
         },
-		tags: ['calm', 'crisp', 'sunset']
+		tags: ['calm', 'crisp', 'sunset'],
 	},
 	volcano: {
 		colors: {
@@ -67,7 +79,7 @@ const islandThemes: IslandTheme = {
             waterColorOne: '#b6207f',
             waterColorTwo: '#f4e68b',
         },
-		tags: ['roasting', 'red', 'scorched', 'toasty', 'volcanic']
+		tags: ['roasting', 'red', 'scorched', 'toasty', 'volcanic'],
 	},
 	winter: {
 		colors: {
@@ -77,18 +89,29 @@ const islandThemes: IslandTheme = {
 			waterColorOne: '#82aff5',
 			waterColorTwo: '#b1cffc'
 		},
-		tags: ['arctic', 'cold', 'cool', 'freezing', 'frosty', 'snowy']
+		tags: ['arctic', 'cold', 'cool', 'freezing', 'frosty', 'snowy'],
 	}
 };
 
-export function findThemeColorsFromTag(tag: string): IslandThemeColors {
+export function getThemeFromTag(tag: string): { themeName: string } & IslandTheme {
 	for (const themeKey in islandThemes) {
 		const theme = islandThemes[themeKey];
 		if (theme.tags.includes(tag)) {
-			return theme.colors;
+			return {themeName: themeKey, ...theme};
 		}
 	}
-	return islandThemes.sunset.colors;
+	return {themeName: 'sunset', ...islandThemes.sunset};
+}
+
+export function getAllThemeTags(): string[] {
+    let allTags: string[] = [];
+
+    for (const themeKey in islandThemes) {
+        const theme = islandThemes[themeKey];
+        allTags = [...allTags, ...theme.tags];
+    }
+
+    return [...new Set(allTags)];
 }
 
 export default islandThemes;

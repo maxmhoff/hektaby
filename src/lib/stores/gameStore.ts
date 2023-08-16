@@ -1,4 +1,4 @@
-import type { IslandThemeColors } from '$lib/data/island-themes';
+import type { IslandTheme } from '$lib/data/island-themes';
 import islandThemes from '$lib/data/island-themes';
 import type Tile from '$lib/types/tile';
 import type { TileType } from '$lib/types/tile';
@@ -11,4 +11,4 @@ export const specialZones: Writable<number> = writable(1);
 export const tiles: Writable<Tile[]> = writable([]);
 export const zoneQueue: Writable<TileType[]> = writable([]);
 export const difficulties: Writable<{easy: number, medium: number, hard: number} | undefined> = writable(undefined);
-export const islandThemeColors: Writable<IslandThemeColors> = writable(islandThemes.sunset.colors);
+export const islandTheme: Writable<{ themeName: string } & IslandTheme> = writable({themeName: 'sunset',...islandThemes.sunset});

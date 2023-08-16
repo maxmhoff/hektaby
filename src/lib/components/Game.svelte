@@ -2,9 +2,9 @@
 	import { goto } from '$app/navigation';
 	import { scale } from 'svelte/transition';
 	import { Canvas } from '@threlte/core';
-	import { difficulties, gameState, islandThemeColors, score, seed, tiles, zoneQueue } from '$lib/stores/gameStore';
+	import { difficulties, gameState, islandTheme, score, seed, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import createSeed from '$lib/utilities/create-seed';
-	import { findThemeColorsFromTag } from '$lib/data/island-themes';
+	import { getThemeFromTag } from '$lib/data/island-themes';
 	import Camera from '$lib/components/3d-experience/Camera.svelte';
 	import HexagonGrid from '$lib/components/3d-experience/HexagonGrid.svelte';
 	import Island from '$lib/components/3d-experience/Island.svelte';
@@ -14,7 +14,7 @@
 	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import Water from '$lib/components/3d-experience/Water.svelte';
 	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';
-	import ThemeHelper from './ThemeHelper.svelte';
+	import ThemeCreator from './ThemeCreator.svelte';
 
 	let assessDifficultyWorker: Worker | undefined = undefined;
 	let dialog: HTMLDialogElement;
@@ -24,7 +24,10 @@
 	$: if ($seed !== computedSeed && $gameState === 'in progress') {
 		loadWorker();
 		computedSeed = $seed;
-		islandThemeColors.set(findThemeColorsFromTag($seed.split('-')[0]));
+		const themeName = $seed.split('-')[0];
+		if(themeName) {
+			islandTheme.set(getThemeFromTag(themeName));
+		}
 	}
 
 	$: if ($zoneQueue.length === 0 && $gameState === 'in progress') {
@@ -36,10 +39,10 @@
 	}
 
 	function clearCurrentGame() {
+		gameState.set('loading');
 		tiles.set([]);
 		score.set(0);
 		zoneQueue.set([]);
-		gameState.set('loading');
 	}
 
 	function startNewGame() {
@@ -103,7 +106,7 @@
 			<button class="game__dialog-button" on:click={() => resetCurrentGame()}>Try Again</button>
 		</div>
 	</dialog>
-	<ThemeHelper />
+	<ThemeCreator />
 </div>
 
 <style lang="scss">

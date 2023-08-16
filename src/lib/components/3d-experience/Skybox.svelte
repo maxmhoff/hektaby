@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { islandThemeColors } from '$lib/stores/gameStore';
+	import { islandTheme } from '$lib/stores/gameStore';
 	import { T } from '@threlte/core';
 	import * as THREE from 'three';
 
@@ -7,8 +7,8 @@
 	let bottomColor: THREE.Color = new THREE.Color();
 
 	$: {
-		topColor.set($islandThemeColors.skyColorOne);
-		bottomColor.set($islandThemeColors.skyColorTwo);
+		topColor.set($islandTheme.colors.skyColorOne);
+		bottomColor.set($islandTheme.colors.skyColorTwo);
 	}
 
 	const sunsetShader = {
