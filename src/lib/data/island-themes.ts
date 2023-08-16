@@ -72,15 +72,15 @@ const islandThemes: IslandThemes = {
 		tags: ['calm', 'crisp', 'sunset'],
 	},
 	volcano: {
-		colors: {
+        colors: {
             islandColor: '#5e4845',
             skyColorOne: '#cb6d4d',
             skyColorTwo: '#1e180a',
             waterColorOne: '#b6207f',
             waterColorTwo: '#f4e68b',
         },
-		tags: ['roasting', 'red', 'scorched', 'toasty', 'volcanic'],
-	},
+        tags: ['fiery', 'roasting', 'red', 'scorched', 'toasty', 'volcanic'],
+    },
 	winter: {
 		colors: {
 			islandColor: '#899790',
