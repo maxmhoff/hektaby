@@ -13,7 +13,7 @@ type State = {
 	score: number;
 };
 
-const maxIterations = 200000;
+const iterationCap = 250000;
 
 function calculateScore(placedTiles: Tile[], tile: Tile) {
     let tileScore = 0;
@@ -105,9 +105,7 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 			}
 
 			counter++;
-			if (counter % maxIterations === 0) {
-                console.log(`time spent: ${(Date.now() - tick) / 1000} seconds`);
-                console.log(`score: ${highScore}`);
+			if (counter % iterationCap === 0) {
 				return {easy: Math.round(.5 * highScore), medium: Math.round(.8 * highScore), hard: highScore};
 			}
 		}
