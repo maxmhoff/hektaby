@@ -1,17 +1,16 @@
 <script lang="ts">
-	import { score, tiles, zoneQueue } from '$lib/stores/gameStore';
-	import type Tile from '$lib/types/tile';
-	import calculateScore from '$lib/utilities/calculate-score';
-	import { T } from '@threlte/core';
-	import { HTML, interactivity } from '@threlte/extras';
-	import { quadInOut, quartOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import { DEG2RAD } from 'three/src/math/MathUtils';
+	import { T } from '@threlte/core';
+	import { HTML, interactivity } from '@threlte/extras';
+	import { score, tiles, zoneQueue } from '$lib/stores/gameStore';
+	import calculateScore from '$lib/utilities/calculate-score';
 	import GridTileModel from './GridTileModel.svelte';
 	import deepCloneArray from '$lib/utilities/deepclone-array';
 	import calculateAdjacencyBonus from '$lib/utilities/calculate-adjacency-bonus';
 	import zoneColors from '$lib/data/zone-colors';
 	import animationSettings from '$lib/data/animation-settings';
+	import type Tile from '$lib/types/tile';
 
 	export let tile: Tile;
 	export let boardPositionY: number;
@@ -68,10 +67,10 @@
 		tile.value = calculateScore(tile);
 		const newTiles = deepCloneArray($tiles);
 		newTiles.forEach((t) => {
-			if (typeof tile.adjacentTiles.find((idx) => idx === t.index) === 'number') {
+			if (typeof tile.adjacentTiles.find((idx) => idx === t.tileIndex) === 'number') {
 				return t.state = 'highlight';
 			}
-			if (t.index === tile.index) {
+			if (t.tileIndex === tile.tileIndex) {
 				return t.state = 'active';
 			}
 			return t.state = 'default';

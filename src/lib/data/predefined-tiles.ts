@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 const predefinedTiles: Tile[] = [
     {
-        index: 0,
+        tileIndex: 0,
         tileType: 'default',
         position: new THREE.Vector3(0, 0, 0),
         adjacentTiles: [1, 2, 3, 4, 5, 6],
@@ -11,7 +11,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 1,
+        tileIndex: 1,
         tileType: 'default',
         position: new THREE.Vector3(5, 0, -9),
         adjacentTiles: [0, 2, 6, 7, 8, 9],
@@ -19,7 +19,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 2,
+        tileIndex: 2,
         tileType: 'default',
         position: new THREE.Vector3(10, 0, 0),
         adjacentTiles: [0, 1, 3, 9, 10],
@@ -27,7 +27,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 3,
+        tileIndex: 3,
         tileType: 'default',
         position: new THREE.Vector3(5, 0, 9),
         adjacentTiles: [0, 2, 4, 10, 11, 12],
@@ -35,7 +35,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 4,
+        tileIndex: 4,
         tileType: 'default',
         position: new THREE.Vector3(-5, 0, 9),
         adjacentTiles: [0, 3, 5, 12, 13, 14],
@@ -43,7 +43,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 5,
+        tileIndex: 5,
         tileType: 'default',
         position: new THREE.Vector3(-10, 0, 0),
         adjacentTiles: [0, 4, 6, 14, 15],
@@ -51,7 +51,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 6,
+        tileIndex: 6,
         tileType: 'default',
         position: new THREE.Vector3(-5, 0, -9),
         adjacentTiles: [0, 1, 5, 7, 15, 16],
@@ -59,7 +59,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 7,
+        tileIndex: 7,
         tileType: 'default',
         position: new THREE.Vector3(0, 0, -18),
         adjacentTiles: [1, 6, 8, 16],
@@ -67,7 +67,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 8,
+        tileIndex: 8,
         tileType: 'default',
         position: new THREE.Vector3(10, 0, -18),
         adjacentTiles: [1, 7, 9],
@@ -75,7 +75,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 9,
+        tileIndex: 9,
         tileType: 'default',
         position: new THREE.Vector3(15, 0, -9),
         adjacentTiles: [1, 2, 8],
@@ -83,7 +83,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 10,
+        tileIndex: 10,
         tileType: 'default',
         position: new THREE.Vector3(15, 0, 9),
         adjacentTiles: [2, 3, 11],
@@ -91,7 +91,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 11,
+        tileIndex: 11,
         tileType: 'default',
         position: new THREE.Vector3(10, 0, 18),
         adjacentTiles: [3, 10, 12],
@@ -99,7 +99,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 12,
+        tileIndex: 12,
         tileType: 'default',
         position: new THREE.Vector3(0, 0, 18),
         adjacentTiles: [3, 4, 11, 13],
@@ -107,7 +107,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 13,
+        tileIndex: 13,
         tileType: 'default',
         position: new THREE.Vector3(-10, 0, 18),
         adjacentTiles: [4, 12, 14],
@@ -115,7 +115,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 14,
+        tileIndex: 14,
         tileType: 'default',
         position: new THREE.Vector3(-15, 0, 9),
         adjacentTiles: [4, 5, 13],
@@ -123,7 +123,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 15,
+        tileIndex: 15,
         tileType: 'default',
         position: new THREE.Vector3(-15, 0, -9),
         adjacentTiles: [5, 6, 16],
@@ -131,7 +131,7 @@ const predefinedTiles: Tile[] = [
         state: 'default',
     },
     {
-        index: 16,
+        tileIndex: 16,
         tileType: 'default',
         position: new THREE.Vector3(-10, 0, -18),
         adjacentTiles: [6, 7, 15],

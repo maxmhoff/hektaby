@@ -1,7 +1,24 @@
 <script lang="ts">
+	import { islandThemeColors } from '$lib/stores/gameStore';
 	import { T, useFrame } from '@threlte/core';
 	import * as THREE from 'three';
 	import { DEG2RAD } from 'three/src/math/MathUtils';
+
+	let waterColorOne: THREE.Color = new THREE.Color();
+	let waterColorTwo: THREE.Color = new THREE.Color();
+
+	$: {
+		waterColorOne = new THREE.Color($islandThemeColors.waterColorOne);
+		waterColorTwo = new THREE.Color($islandThemeColors.waterColorTwo);
+	}
+
+	let time = performance.now() * 0.001; // Convert to seconds
+
+	const uniforms = {
+		time: { value: time },
+		waterColorOne: { value: waterColorOne },
+		waterColorTwo: { value: waterColorTwo }
+	};
 
 	const vertexShader = `
 		precision highp float;
@@ -25,34 +42,35 @@
 	`;
 
 	const fragmentShader = `
-		precision highp float;
-		varying vec2 vUv;
-		varying float yPosition;
+    precision highp float;
+    varying vec2 vUv;
+    varying float yPosition;
+    uniform vec3 waterColorOne;
+    uniform vec3 waterColorTwo;
 
-		void main() {
-			vec3 waterColor = vec3(0.0, 0.5, 1.0);
-			vec3 lighterColor = vec3(0.3, 0.65, 1.2);
-			float gradient = yPosition * 0.5 + 0.5;
-			vec3 color = mix(waterColor, lighterColor, clamp(gradient, 0.0, 1.0));
-			gl_FragColor = vec4(color, 1.0);
-		}
-	`;
+    void main() {
+        float gradient = yPosition * 0.5 + 0.5;
+        vec3 color = mix(waterColorOne, waterColorTwo, clamp(gradient, 0.0, 1.0));
+        gl_FragColor = vec4(color, 1.0);
+    }
+`;
 
-	let time = performance.now() * 0.001; // Convert to seconds
-	const uniforms = { time: { value: time } };
 	const shaderMaterial = new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader });
-	const geometry = new THREE.CircleGeometry(60, 60, 64, 64);
+	const geometry = new THREE.CircleGeometry(54, 54, 64, 64);
 
 	let lastFrameTime = performance.now();
+
 	useFrame(() => {
 		let currentFrameTime = performance.now();
 		let delta = (currentFrameTime - lastFrameTime) * 0.001; // Convert to seconds
 		lastFrameTime = currentFrameTime;
 
-		time += delta * 4; // Adjust the factor here as needed
+		time += delta * 3.5; // Adjust the factor here as needed
 		shaderMaterial.uniforms.time.value = time;
+		shaderMaterial.uniforms.waterColorOne.value = waterColorOne;
+		shaderMaterial.uniforms.waterColorTwo.value = waterColorTwo;
 		shaderMaterial.needsUpdate = true;
 	});
 </script>
 
-<T.Mesh position.y={-2} rotation.y={DEG2RAD * 180} {geometry} material={shaderMaterial} />
+<T.Mesh position.y={-1.5} rotation.y={DEG2RAD * 180} {geometry} material={shaderMaterial} />

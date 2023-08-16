@@ -1,10 +1,20 @@
 <script lang="ts">
+	import { islandThemeColors } from '$lib/stores/gameStore';
 	import { T } from '@threlte/core';
 	import * as THREE from 'three';
+
+	let topColor: THREE.Color = new THREE.Color();
+	let bottomColor: THREE.Color = new THREE.Color();
+
+	$: {
+		topColor.set($islandThemeColors.skyColorOne);
+		bottomColor.set($islandThemeColors.skyColorTwo);
+	}
+
 	const sunsetShader = {
 		uniforms: {
-			topColor: { value: new THREE.Color(0xb095e8) }, // Lavender
-			bottomColor: { value: new THREE.Color(0xde99aa) }, // Pink
+			topColor: { value: topColor },
+			bottomColor: { value: bottomColor },
 			offset: { value: 40.0 },
 			exponent: { value: 1 }
 		},
