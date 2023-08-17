@@ -13,13 +13,23 @@ export type IslandThemes = Record<string, IslandTheme>;
 const islandThemes: IslandThemes = {
 	beach: {
 		colors: {
-			islandColor: '#96928d',
+			islandColor: '#9a927e',
 			skyColorOne: '#ffebb3',
-			skyColorTwo: '#9ed0ff',
-			waterColorOne: '#4d8fdb',
-			waterColorTwo: '#77c5fd'
+			skyColorTwo: '#bddfff',
+			waterColorOne: '#5ca8ff',
+			waterColorTwo: '#a3d9ff',
 		},
 		tags: ['blazing', 'hot', 'sunny'],
+	},
+	charmeoffensiv: {
+		colors: {
+			islandColor: '#328b54',
+			skyColorOne: '#80a7e5',
+			skyColorTwo: '#ffffff',
+			waterColorOne: '#65c4d7',
+			waterColorTwo: '#96dfee'
+		},
+		tags: ['bright', 'chilly', 'foggy', 'marble', 'misty', 'mediterranean', 'quiet'],
 	},
 	exotic: {
 		colors: {
@@ -41,15 +51,25 @@ const islandThemes: IslandThemes = {
         },
         tags: ['acid', 'fuchsia', 'breathtaking', 'majestic'],
     },
-	charmeoffensiv: {
+	lillith: {
 		colors: {
-			islandColor: '#328b54',
-			skyColorOne: '#80a7e5',
-			skyColorTwo: '#ffffff',
-			waterColorOne: '#65c4d7',
-			waterColorTwo: '#96dfee'
+			islandColor: '#212121',
+			skyColorOne: '#545454',
+			skyColorTwo: '#d39797',
+			waterColorOne: '#8f0000',
+			waterColorTwo: '#a92323',
 		},
-		tags: ['bright', 'chilly', 'foggy', 'marble', 'misty', 'mediterranean', 'quiet'],
+		tags: ['blood', 'red'],
+	},
+	retro: {
+		colors: {
+			islandColor: '#49363a',
+			skyColorOne: '#ebe76c',
+			skyColorTwo: '#f0b86e',
+			waterColorOne: '#836096',
+			waterColorTwo: '#ed7b7b',
+		},
+		tags: ['old', 'forgotten', 'charming'],
 	},
 	storm: {
 		colors: {
@@ -79,7 +99,7 @@ const islandThemes: IslandThemes = {
             waterColorOne: '#b6207f',
             waterColorTwo: '#f4e68b',
         },
-        tags: ['fiery', 'roasting', 'red', 'scorched', 'toasty', 'volcanic'],
+        tags: ['fiery', 'roasting', 'scorched', 'toasty', 'volcanic'],
     },
 	winter: {
 		colors: {
