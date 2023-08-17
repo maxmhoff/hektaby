@@ -73,16 +73,6 @@ const islandThemes: IslandThemes = {
 		},
 		tags: ['fuchsia', 'breathtaking', 'majestic']
 	},
-	future: {
-		colors: {
-			islandColor: '#57a8a7',
-			skyColorOne: '#00f0e0',
-			skyColorTwo: '#ffd1f0',
-			waterColorOne: '#77e4dd',
-			waterColorTwo: '#fddbff',
-		},
-		tags: ['futuristic', 'ethereal'],
-	},
 	// created by Jes Kristensen
 	lillith: {
 		colors: {
@@ -94,18 +84,6 @@ const islandThemes: IslandThemes = {
 		},
 		tags: ['blood', 'red']
 	},
-	// created by Siv Steffensen
-	midday: {
-		colors: {
-			islandColor: '#497000',
-			skyColorOne: '#fffc3d',
-			skyColorTwo: '#dbdd5f',
-			waterColorOne: '#9b98f1',
-			waterColorTwo: '#6a7eb4',
-		},
-		tags: ['cloudless', 'luminous'],
-	},
-	// inspiration: https://colorhunt.co/palette/ebe76cf0b86eed7b7b836096
 	retro: {
 		colors: {
 			islandColor: '#49363a',

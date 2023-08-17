@@ -232,6 +232,7 @@
 		padding: 3rem 1rem 1rem;
 		transform: translateY(-50%);
 		border-radius: 1rem;
+		user-select: none;
 
 		&__title {
 			position: absolute;
