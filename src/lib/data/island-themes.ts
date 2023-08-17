@@ -73,6 +73,16 @@ const islandThemes: IslandThemes = {
 		},
 		tags: ['fuchsia', 'breathtaking', 'majestic']
 	},
+	future: {
+		colors: {
+			islandColor: '#57a8a7',
+			skyColorOne: '#00f0e0',
+			skyColorTwo: '#ffd1f0',
+			waterColorOne: '#77e4dd',
+			waterColorTwo: '#fddbff',
+		},
+		tags: ['futuristic', 'ethereal'],
+	},
 	// created by Jes Kristensen
 	lillith: {
 		colors: {
@@ -83,6 +93,17 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#a92323'
 		},
 		tags: ['blood', 'red']
+	},
+	// created by Siv Steffensen
+	midday: {
+		colors: {
+			islandColor: '#497000',
+			skyColorOne: '#fffc3d',
+			skyColorTwo: '#dbdd5f',
+			waterColorOne: '#9b98f1',
+			waterColorTwo: '#6a7eb4',
+		},
+		tags: ['cloudless', 'luminous'],
 	},
 	// inspiration: https://colorhunt.co/palette/ebe76cf0b86eed7b7b836096
 	retro: {
@@ -137,14 +158,14 @@ const islandThemes: IslandThemes = {
 	}
 };
 
-export function getThemeFromTag(tag: string): { themeName: string } & IslandTheme {
+export function getThemeFromTag(tag: string): { themeName: string } & IslandTheme | null {
 	for (const themeKey in islandThemes) {
 		const theme = islandThemes[themeKey];
 		if (theme.tags.includes(tag)) {
 			return { themeName: themeKey, ...theme };
 		}
 	}
-	return { themeName: 'sunset', ...islandThemes.sunset };
+	return null;
 }
 
 export function getAllThemeTags(): string[] {
