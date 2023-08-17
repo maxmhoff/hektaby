@@ -19,7 +19,7 @@ const islandThemes: IslandThemes = {
 			waterColorOne: '#5fcd37',
 			waterColorTwo: '#caff9e'
 		},
-		tags: ['acid', 'polluted']
+		tags: ['acid', 'polluted', 'toxic']
 	},
 	beach: {
 		colors: {
@@ -31,19 +31,19 @@ const islandThemes: IslandThemes = {
 		},
 		tags: ['blazing', 'hot', 'sunny']
 	},
-	// made by Siv Steffensen
+	// created by Siv Steffensen
 	brocante: {
 		colors: {
-			islandColor: '#867e7e',
+			islandColor: '#816e72',
 			skyColorOne: '#e1c8e4',
 			skyColorTwo: '#faf3f0',
 			waterColorOne: '#f1fff0',
-			waterColorTwo: '#d1e6e0'
+			waterColorTwo: '#d1e6e0',
 		},
-		tags: ['faded', 'delicate', 'elegant', 'lovely']
+		tags: ['faded', 'delicate', 'elegant', 'lovely'],
 	},
-	// made by Siv Steffensen
-	misty: {
+	// created by Siv Steffensen
+	marble: {
 		colors: {
 			islandColor: '#328b54',
 			skyColorOne: '#80a7e5',
@@ -73,7 +73,7 @@ const islandThemes: IslandThemes = {
 		},
 		tags: ['fuchsia', 'breathtaking', 'majestic']
 	},
-	// made by Jes Kristensen
+	// created by Jes Kristensen
 	lillith: {
 		colors: {
 			islandColor: '#212121',
