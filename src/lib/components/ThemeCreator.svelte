@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { gameState, islandTheme } from '$lib/stores/gameStore';
+	import islandThemes from '$lib/data/island-themes';
 
 	let isActive = false;
 	let seedThemeLoaded = false;
 
+	let currentTheme: string;
 	let name: string;
 	let tags: string;
 	let islandColor: string;
@@ -13,13 +15,40 @@
 	let waterColorOne: string;
 	let waterColorTwo: string;
 
+	$: {
+		if ($gameState === 'loading') {
+			seedThemeLoaded = false;
+		}
+
+		if ($gameState === 'in progress' && !seedThemeLoaded) {
+			updateValuesToCurrentIslandTheme();
+			seedThemeLoaded = true;
+		}
+	}
+
+	function updateValuesToCurrentIslandTheme() {
+		currentTheme = $islandTheme.themeName;
+		name = $islandTheme.themeName;
+		islandColor = $islandTheme.colors.islandColor;
+		skyColorOne = $islandTheme.colors.skyColorOne;
+		skyColorTwo = $islandTheme.colors.skyColorTwo;
+		waterColorOne = $islandTheme.colors.waterColorOne;
+		waterColorTwo = $islandTheme.colors.waterColorTwo;
+		tags = $islandTheme.tags.join(', ');
+	}
+
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'T' && event.shiftKey) {
 			isActive = !isActive;
 		}
 	}
 
-	function updateIslandTheme() {
+	function updateIslandTheme(isTheme?: boolean) {
+		if (isTheme) {
+			islandTheme.set({ themeName: currentTheme, ...islandThemes[currentTheme] });
+			return updateValuesToCurrentIslandTheme();
+		}
+		currentTheme = 'custom';
 		islandTheme.set({
 			themeName: name,
 			colors: {
@@ -31,23 +60,6 @@
 			},
 			tags: tags?.trim().split(',')
 		});
-	}
-
-	$: {
-		if ($gameState === 'loading') {
-			seedThemeLoaded = false;
-		}
-
-		if ($gameState === 'in progress' && !seedThemeLoaded) {
-			name = $islandTheme.themeName;
-			islandColor = $islandTheme.colors.islandColor;
-			skyColorOne = $islandTheme.colors.skyColorOne;
-			skyColorTwo = $islandTheme.colors.skyColorTwo;
-			waterColorOne = $islandTheme.colors.waterColorOne;
-			waterColorTwo = $islandTheme.colors.waterColorTwo;
-			tags = $islandTheme.tags.join(', ');
-			seedThemeLoaded = true;
-		}
 	}
 
 	function copy() {
@@ -84,6 +96,20 @@
 
 {#if isActive}
 	<div class="theme-helper" transition:fade={{ duration: 200 }}>
+		<div class="theme-helper__field">
+			<label class="theme-helper__label" for="theme">Themes</label>
+			<select
+				bind:value={currentTheme}
+				on:change={() => updateIslandTheme(true)}
+				class="theme-helper__input"
+				name="theme"
+			>
+				{#each Object.keys(islandThemes) as themeName}
+					<option style={`background-color: ${islandThemes[themeName].colors.waterColorTwo}90;`}>{themeName}</option>
+				{/each}
+				<option>custom</option>
+			</select>
+		</div>
 		<div class="theme-helper__field">
 			<label class="theme-helper__label" for="name">Theme Name</label>
 			<input
@@ -171,6 +197,7 @@
 		right: 2rem;
 		padding: 1rem;
 		transform: translateY(-50%);
+		border-radius: 1rem;
 
 		&__field {
 			display: flex;
