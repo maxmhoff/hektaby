@@ -14,7 +14,7 @@
 	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import Water from '$lib/components/3d-experience/Water.svelte';
 	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';
-	import ThemeCreator from './ThemeCreator.svelte';
+	import ThemeEditor from './ThemeEditor.svelte';
 
 	let assessDifficultyWorker: Worker | undefined = undefined;
 	let dialog: HTMLDialogElement;
@@ -25,8 +25,9 @@
 		loadWorker();
 		computedSeed = $seed;
 		const themeName = $seed.split('-')[0];
-		if(themeName) {
-			islandTheme.set(getThemeFromTag(themeName));
+		const theme = getThemeFromTag(themeName);
+		if(themeName && theme) {
+			islandTheme.set(theme);
 		}
 	}
 
@@ -88,13 +89,13 @@
 		<p class="game__final-score">Your final score was: {$score}</p>
 		<div class="game__dialog-stars">
 			{#if $difficulties && isOpen}
-				<span in:scale={{ duration: 300, delay: 100 * 1 }}>
+				<span in:scale={{ duration: 300, delay: 100 * 0 + 250 }}>
 					<Star hasFill={$score >= $difficulties.easy} />
 				</span>
-				<span in:scale={{ duration: 300, delay: 100 * 2 }}>
+				<span in:scale={{ duration: 300, delay: 100 * 1 + 250 }}>
 					<Star hasFill={$score >= $difficulties.medium} />
 				</span>
-				<span in:scale={{ duration: 300, delay: 100 * 3 }}>
+				<span in:scale={{ duration: 300, delay: 100 * 2 + 250 }}>
 					<Star hasFill={$score >= $difficulties.hard} />
 				</span>
 			{:else}
@@ -106,7 +107,7 @@
 			<button class="game__dialog-button" on:click={() => resetCurrentGame()}>Try Again</button>
 		</div>
 	</dialog>
-	<ThemeCreator />
+	<ThemeEditor />
 </div>
 
 <style lang="scss">

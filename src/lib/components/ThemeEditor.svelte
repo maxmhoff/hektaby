@@ -8,12 +8,15 @@
 
 	let currentTheme: string;
 	let name: string;
-	let tags: string;
+
 	let islandColor: string;
 	let skyColorOne: string;
 	let skyColorTwo: string;
 	let waterColorOne: string;
 	let waterColorTwo: string;
+
+	let tags: string;
+	let designer: string;
 
 	let unavailableTags: string[] = [];
 
@@ -37,6 +40,7 @@
 		waterColorOne = $islandTheme.colors.waterColorOne;
 		waterColorTwo = $islandTheme.colors.waterColorTwo;
 		tags = $islandTheme.tags.join(', ');
+		designer = $islandTheme.designer;
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
@@ -62,39 +66,9 @@
 				waterColorOne,
 				waterColorTwo
 			},
-			tags: tags?.trim().split(',')
+			tags: tags?.trim().split(','),
+			designer: designer
 		});
-	}
-
-	function copy() {
-		checkTagsAvailability();
-		if (unavailableTags.length > 0) return;
-		let formattedTags = tags
-			? tags
-					.replace(/[\r\n]+/g, ' ')
-					.trim()
-					.split(',')
-					.map((tag) => `'${tag.toLowerCase().trim()}'`)
-					.join(', ')
-			: null;
-
-		let tagSection = formattedTags ? `\ttags: [${formattedTags}],` : '';
-		let valueToCopy = name
-			? `${name.toLowerCase()}: {\n\tcolors: {\n\t\tislandColor: '${islandColor}',\n\t\tskyColorOne: '${skyColorOne}',\n\t\tskyColorTwo: '${skyColorTwo}',\n\t\twaterColorOne: '${waterColorOne}',\n\t\twaterColorTwo: '${waterColorTwo}',\n\t},${
-					tagSection ? '\n' + tagSection : ''
-			  }\n}`
-			: `{\n\tcolors: {\n\t\tislandColor: '${islandColor}',\n\t\tskyColorOne: '${skyColorOne}',\n\t\tskyColorTwo: '${skyColorTwo}',\n\t\twaterColorOne: '${waterColorOne}',\n\t\twaterColorTwo: '${waterColorTwo}',\n\t},${
-					tagSection ? '\n' + tagSection : ''
-			  }\n}`;
-
-		navigator.clipboard
-			.writeText(valueToCopy)
-			.then(() => {
-				console.log('Copied to clipboard!');
-			})
-			.catch((err) => {
-				console.error('Failed to copy!', err);
-			});
 	}
 
 	function checkTagsAvailability() {
@@ -107,21 +81,49 @@
 		});
 		unavailableTags = [...tagsAlreadyInUse];
 	}
+
+	function copy() {
+		checkTagsAvailability();
+		if (unavailableTags.length > 0) return;
+
+		let formattedTags = tags
+			.replace(/[\r\n]+/g, ' ')
+			.trim()
+			.split(',')
+			.map((tag) => tag.toLowerCase().trim())
+			.sort() // This will alphabetize the tags
+			.map((tag) => `'${tag}'`)
+			.join(', ');
+
+		let designerSection = `\tdesigner: '${designer}',`;
+		let tagSection = formattedTags ? `\ttags: [${formattedTags}],` : '';
+
+		let valueToCopy = `${name.toLowerCase()}: {\n\tcolors: {\n\t\tislandColor: '${islandColor}',\n\t\tskyColorOne: '${skyColorOne}',\n\t\tskyColorTwo: '${skyColorTwo}',\n\t\twaterColorOne: '${waterColorOne}',\n\t\twaterColorTwo: '${waterColorTwo}',\n\t},\n${designerSection}\n${tagSection}\n}`;
+
+		navigator.clipboard
+			.writeText(valueToCopy)
+			.then(() => {
+				console.log('Copied to clipboard!');
+			})
+			.catch((err) => {
+				console.error('Failed to copy!', err);
+			});
+	}
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
 
 {#if isActive}
-	<form class="theme-creator" transition:fade={{ duration: 200 }}>
-		<p class="theme-creator__title">Theme Creator 🎨</p>
-		<button class="theme-creator__close" on:click={() => (isActive = false)}>&#x2715</button>
-		<hr class="theme-creator__hr" />
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="theme">Themes</label>
+	<form class="theme-editor" transition:fade={{ duration: 200 }}>
+		<p class="theme-editor__title">Theme Editor 🎨</p>
+		<button class="theme-editor__close" on:click={() => (isActive = false)}>&#x2715</button>
+		<hr class="theme-editor__hr" />
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="theme">Themes</label>
 			<select
 				bind:value={currentTheme}
 				on:change={() => updateIslandTheme(true)}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="theme"
 			>
 				{#each Object.keys(islandThemes) as themeName}
@@ -132,80 +134,80 @@
 				<option>custom</option>
 			</select>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="name">Theme Name</label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="name">Theme Name</label>
 			<input
 				bind:value={name}
 				on:input={() => updateIslandTheme()}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="name"
 				type="text"
 				required
 			/>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="islandColor">Island Color</label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="islandColor">Island Color</label>
 			<input
 				bind:value={islandColor}
 				on:input={() => updateIslandTheme()}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="islandColor"
 				type="color"
 			/>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="skyColorOne">Sky Color #1</label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="skyColorOne">Sky Color #1</label>
 			<input
 				bind:value={skyColorOne}
 				on:input={() => updateIslandTheme()}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="islandColor"
 				type="color"
 			/>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="skyColorTwo">Sky Color #2</label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="skyColorTwo">Sky Color #2</label>
 			<input
 				bind:value={skyColorTwo}
 				on:input={() => updateIslandTheme()}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="islandColor"
 				type="color"
 			/>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="waterColorOne">Water Color #1</label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="waterColorOne">Water Color #1</label>
 			<input
 				bind:value={waterColorOne}
 				on:input={() => updateIslandTheme()}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="waterColorOne"
 				type="color"
 			/>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="waterColorTwo">Water Color #2</label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="waterColorTwo">Water Color #2</label>
 			<input
 				bind:value={waterColorTwo}
 				on:input={() => updateIslandTheme()}
-				class="theme-creator__input"
+				class="theme-editor__input"
 				name="waterColorTwo"
 				type="color"
 			/>
 		</div>
-		<div class="theme-creator__field">
-			<label class="theme-creator__label" for="tags">Tags </label>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="tags">Tags </label>
 			<textarea
 				bind:value={tags}
-				on:change={(e) => checkTagsAvailability(e)}
-				class="theme-creator__input theme-creator__input--lg"
+				on:change={() => checkTagsAvailability()}
+				class="theme-editor__input theme-editor__input--lg"
 				name="tags"
 				placeholder="separate by comma"
 			/>
 		</div>
-		<div class="theme-creator__error">
+		<div class="theme-editor__error">
 			{#if unavailableTags.length > 0}
-				<p class="theme-creator__tags-unavailable">These tags are already in use:</p>
+				<p class="theme-editor__tags-unavailable">These tags are already in use:</p>
 				<p>
 					{#each unavailableTags as tag, idx}<span
 							>{`${tag}${idx + 1 === unavailableTags.length ? '.' : ','}`}</span
@@ -213,17 +215,28 @@
 				</p>
 			{/if}
 		</div>
-		<button type="submit" class="theme-creator__copy" on:click={() => copy()}>copy</button>
+		<div class="theme-editor__field">
+			<label class="theme-editor__label" for="designer">Designed by</label>
+			<input
+				bind:value={designer}
+				on:input={() => updateIslandTheme()}
+				class="theme-editor__input theme-editor__input--sans"
+				name="designer"
+				type="text"
+				required
+			/>
+		</div>
+		<button type="submit" class="theme-editor__copy" on:click={() => copy()}>copy</button>
 	</form>
 {/if}
 
 <style lang="scss">
 	@use '$lib/styles/variables.scss' as *;
 
-	.theme-creator {
+	.theme-editor {
 		display: flex;
 		flex-flow: column;
-		gap: .5rem;
+		gap: 0.5rem;
 		background-color: rgba(0 0 0 / 80%);
 		position: fixed;
 		width: 400px;
@@ -245,7 +258,7 @@
 		&__close {
 			position: absolute;
 			top: 1rem;
-			right: .75rem;
+			right: 0.75rem;
 			width: fit-content;
 			font-size: $text-sm;
 			font-weight: 700;
@@ -254,7 +267,7 @@
 			border: none;
 			cursor: pointer;
 			transform-origin: center;
-			transition: transform .2s ease-in-out;
+			transition: transform 0.2s ease-in-out;
 
 			&:hover {
 				transform: scale(1.5);
@@ -264,7 +277,7 @@
 		&__hr {
 			width: 100%;
 			border: none;
-    		border-bottom: 2px solid white;
+			border-bottom: 2px solid white;
 		}
 
 		&__field {
@@ -288,6 +301,11 @@
 
 			&--lg {
 				height: 8rem;
+			}
+
+			&--sans {
+				font-family: sans-serif;
+				font-weight: 700;
 			}
 		}
 
