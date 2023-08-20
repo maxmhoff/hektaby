@@ -15,6 +15,12 @@ type State = {
 
 const iterationCap = 250000;
 
+function getShiftedTileOrder(tiles: Tile[], iteration: number): Tile[] {
+    const shiftAmount = iteration % tiles.length;
+    const shiftedTiles = [...tiles.slice(shiftAmount), ...tiles.slice(0, shiftAmount)];
+    return shiftedTiles;
+}
+
 function calculateScore(placedTiles: Tile[], tile: Tile) {
     let tileScore = 0;
     const adjacentTilesSet = new Set(tile.adjacentTiles);
@@ -26,10 +32,12 @@ function calculateScore(placedTiles: Tile[], tile: Tile) {
     return Math.max(tileScore, 0);
 }
 
-function generateNextStates(state: State): State[] {
+function generateNextStates(state: State, iteration: number): State[] {
 	let nextStates: State[] = [];
-	let remainingTiles = state.predefinedTiles.filter((tile) => tile.tileType === 'default');
-	let nextZone = state.zoneQueue[state.zoneQueue.length - 1];
+    let remainingTiles = state.predefinedTiles.filter((tile) => tile.tileType === 'default');
+    remainingTiles = getShiftedTileOrder(remainingTiles, iteration);
+
+    let nextZone = state.zoneQueue[state.zoneQueue.length - 1];
 
 	for (let tile of remainingTiles) {
 		let nextState = JSON.parse(JSON.stringify(state));
@@ -88,7 +96,6 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 	];
 
 	let counter = 0;
-    let tick = Date.now();
 
 	while (stack.length > 0) {
 		let state = stack.pop();
@@ -100,7 +107,7 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 					highScoreTiles = state.selectedTiles;
 				}
 			} else {
-				let nextStates = generateNextStates(state);
+				let nextStates = generateNextStates(state, counter);
 				stack.push(...nextStates);
 			}
 
@@ -114,7 +121,5 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 
 onmessage = (event: {data: {predefinedTiles: Tile[], zoneQueue: TileType[]}}) => {
     const {predefinedTiles, zoneQueue} = event.data;
-    postMessage(assessDifficulty(predefinedTiles, zoneQueue))
+    postMessage(assessDifficulty(predefinedTiles, zoneQueue));
 };
-
-export {};
