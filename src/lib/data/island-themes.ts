@@ -97,7 +97,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#20620e',
 		},
 		designer: 'Autoghost',
-		tags: ['humid, overgrown'],
+		tags: ['humid', 'overgrown'],
 	},
 	lillith: {
 		colors: {
