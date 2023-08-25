@@ -88,6 +88,17 @@ const islandThemes: IslandThemes = {
 		designer: 'VuFFeR',
 		tags: ['fuchsia', 'breathtaking', 'majestic'],
 	},
+	jungle: {
+		colors: {
+			islandColor: '#1d741b',
+			skyColorOne: '#80ace5',
+			skyColorTwo: '#1e180a',
+			waterColorOne: '#26e36f',
+			waterColorTwo: '#20620e',
+		},
+		designer: 'Autoghost',
+		tags: ['humid, overgrown'],
+	},
 	lillith: {
 		colors: {
 			islandColor: '#212121',
