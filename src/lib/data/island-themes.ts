@@ -55,6 +55,17 @@ const islandThemes: IslandThemes = {
 		designer: 'KatteFimz',
 		tags: ['faded', 'delicate', 'elegant', 'lovely'],
 	},
+	candy: {
+		colors: {
+			islandColor: '#343f74',
+			skyColorOne: '#af96e8',
+			skyColorTwo: '#dd9cb3',
+			waterColorOne: '#2c79dd',
+			waterColorTwo: '#f5a3cb',
+		},
+		designer: 'Frida',
+		tags: ['salmon', 'sugar'],
+	},
 	emerald: {
 		colors: {
 			islandColor: '#107050',
