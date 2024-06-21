@@ -1,125 +1,149 @@
-import SCORES from '$lib/data/scores';
 import type { TileType } from '$lib/types/tile';
-import type Tile from '$lib/types/tile';;
+import type Tile from '$lib/types/tile';
+import calculateScore from './calculate-score';
 
 type State = {
-	predefinedTiles: Tile[];
-	zoneQueue: TileType[];
-	selectedTiles: {
-		tileIndex: number;
-		tileType: TileType;
-		score: number;
-	}[];
+	tiles: Tile[];
+	tileOrder: number[];
 	score: number;
+	zoneQueue: TileType[];
 };
 
-const iterationCap = 250000;
+function generateChildren(state: State): State[] {
+	const childStates: State[] = [];
+	const availableTiles = state.tiles.filter((tile) => tile.tileType === 'default');
 
-function getShiftedTileOrder(tiles: Tile[], iteration: number): Tile[] {
-    const shiftAmount = iteration % tiles.length;
-    const shiftedTiles = [...tiles.slice(shiftAmount), ...tiles.slice(0, shiftAmount)];
-    return shiftedTiles;
+	availableTiles.forEach((tile) => {
+		if (tile.tileType === 'default') {
+			const newQueue = [...state.zoneQueue];
+			const newTileType = newQueue.pop();
+			if (newTileType) {
+				const newTileValue = calculateScore(state.tiles, { ...tile, tileType: newTileType });
+
+				childStates.push({
+					tiles: state.tiles.map((t) =>
+						t.tileIndex === tile.tileIndex
+							? { ...t, tileType: newTileType, value: newTileValue }
+							: t
+					),
+					tileOrder: [...state.tileOrder, tile.tileIndex],
+					score: state.score + newTileValue,
+					zoneQueue: newQueue
+				});
+			}
+		}
+	});
+
+	return childStates;
 }
 
-function calculateScore(placedTiles: Tile[], tile: Tile) {
-    let tileScore = 0;
-    const adjacentTilesSet = new Set(tile.adjacentTiles);
-    placedTiles.forEach((placedTile) => {
-        if (adjacentTilesSet.has(placedTile.tileIndex)) {
-            tileScore += SCORES[tile.tileType][placedTile.tileType] || 0;
-        }
-    });
-    return Math.max(tileScore, 0);
+function findMostPromisingStates(states: State[], beamSize: number): State[] {
+	if (states.length === 0) return [];
+
+	const scoredStates = states.map((state) => ({
+		state,
+		combinedScore: state.score + calcBlueGemPotential(state)
+	}));
+
+	return scoredStates
+		.sort((a, b) => b.combinedScore - a.combinedScore)
+		.slice(0, beamSize)
+		.map((entry) => entry.state);
 }
 
-function generateNextStates(state: State, iteration: number): State[] {
-	let nextStates: State[] = [];
-    let remainingTiles = state.predefinedTiles.filter((tile) => tile.tileType === 'default');
-    remainingTiles = getShiftedTileOrder(remainingTiles, iteration);
+// a blue gem is a commercial zone which is placed in the center of a bunch of residential / industrial zones
+function calcBlueGemPotential(state: State): number {
+	let blueGemPotential = 0;
 
-    let nextZone = state.zoneQueue[state.zoneQueue.length - 1];
+	// Find the last commercial zone in the queue
+	const lastCommercialIndex = state.zoneQueue.lastIndexOf('commercial');
+	if (lastCommercialIndex === -1) return blueGemPotential;
 
-	for (let tile of remainingTiles) {
-		let nextState = JSON.parse(JSON.stringify(state));
-		let nextTile = nextState.predefinedTiles.find((t: Tile) => t.tileIndex === tile.tileIndex);
-		nextTile.tileType = nextZone;
+	// Count residential and industrial zones before the last commercial zone
+	const residentialCount = state.zoneQueue
+		.slice(0, lastCommercialIndex)
+		.filter((zone) => zone === 'residential').length;
+	const industrialCount = state.zoneQueue
+		.slice(0, lastCommercialIndex)
+		.filter((zone) => zone === 'industrial').length;
 
-		// Calculate the score for the new tile and add it to the overall score
-		let tileScore = calculateScore(
-			[
-				...nextState.selectedTiles,
-				{
-					tileIndex: nextTile.tileIndex,
-					tileType: nextZone
+	// Iterate through tiles to calculate blue gem potential
+	state.tiles.forEach((tile) => {
+		if (tile.tileType === 'default' && tile.adjacentTiles.length >= 3) {
+			// Check if the adjacent tiles are industrial, residential zones, or default with potential
+			const suitableAdjacents = tile.adjacentTiles.filter((adjTile) => {
+				const adj = state.tiles.find((t) => t.tileIndex === adjTile);
+				if (!adj) return false;
+
+				if (adj.tileType === 'industrial' || adj.tileType === 'residential') {
+					return true;
+				} else if (adj.tileType === 'default') {
+					// Consider default tiles suitable if there are enough zones before the last commercial in the queue
+					return residentialCount > 0 || industrialCount > 0;
 				}
-			],
-			nextTile
-		); // Calculate the score
-		nextTile.value = tileScore; // Store the score on the tile
-		nextState.score += tileScore; // Add the score to the total
+				return false;
+			});
 
-		nextState.zoneQueue.pop();
-		nextState.selectedTiles.push({
-			tileIndex: tile.tileIndex,
-			tileType: nextZone,
-			score: tileScore
-		}); // Store the score in the selectedTiles
+			if (suitableAdjacents.length) {
+				blueGemPotential = Math.max(blueGemPotential, suitableAdjacents.length * 2);
+			}
+		}
+	});
 
-		nextStates.push(nextState);
-	}
+	return blueGemPotential;
+}
 
-	return nextStates;
+function generateStateKey(state: State): string {
+	const tileKey = state.tiles.map((tile) => `${tile.tileIndex}-${tile.tileType}`).join('|');
+	return `${tileKey}-${state.score}`;
 }
 
 function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
-	let initialScore = 0;
-	let highScore = 0;
-	let highScoreTiles = null;
+	const start = Date.now();
 
-	let selectedTilesInit = predefinedTiles
-		.filter((tile) => tile.tileType !== 'default')
-		.map((tile) => {
-			return {
-				tileIndex: tile.tileIndex,
-				tileType: tile.tileType,
-				score: 0
-			};
+	const seenStates = new Set<string>();
+	const initialState: State = {
+		tiles: predefinedTiles,
+		tileOrder: [],
+		score: 0,
+		zoneQueue: zoneQueue
+	};
+
+	const beamSize = 10000;
+	let currentDepth = 0;
+	let currentStates: State[] = [initialState];
+
+	while (currentDepth < zoneQueue.length) {
+		currentDepth++;
+		if (currentDepth > zoneQueue.length) break;
+
+		let nextStates: State[] = [];
+
+		currentStates.forEach((state) => {
+			generateChildren(state).forEach((child) => {
+				const stateKey = generateStateKey(child);
+				if (!seenStates.has(stateKey)) {
+					seenStates.add(stateKey);
+					nextStates.push(child);
+				}
+			});
 		});
 
-	let stack = [
-		{
-			predefinedTiles: JSON.parse(JSON.stringify(predefinedTiles)),
-			zoneQueue: JSON.parse(JSON.stringify(zoneQueue)),
-			selectedTiles: selectedTilesInit,
-			score: initialScore
-		}
-	];
-
-	let counter = 0;
-
-	while (stack.length > 0) {
-		let state = stack.pop();
-
-		if (state) {
-			if (state.zoneQueue.length === 0) {
-				if (state.score > highScore) {
-					highScore = state.score;
-					highScoreTiles = state.selectedTiles;
-				}
-			} else {
-				let nextStates = generateNextStates(state, counter);
-				stack.push(...nextStates);
-			}
-
-			counter++;
-			if (counter % iterationCap === 0) {
-				return {easy: Math.round(.5 * highScore), medium: Math.round(.8 * highScore), hard: highScore};
-			}
-		}
+		currentStates = findMostPromisingStates(nextStates, beamSize);
 	}
+
+	const solution = currentStates[0];
+		
+
+
+	return {
+		score: solution.score,
+		tileOrder: solution.tileOrder,
+		elapsedTime: (Date.now() - start) / 1000
+	};
 }
 
-onmessage = (event: {data: {predefinedTiles: Tile[], zoneQueue: TileType[]}}) => {
-    const {predefinedTiles, zoneQueue} = event.data;
-    postMessage(assessDifficulty(predefinedTiles, zoneQueue));
+onmessage = (event: { data: { predefinedTiles: Tile[]; zoneQueue: TileType[] } }) => {
+	const { predefinedTiles, zoneQueue } = event.data;
+	postMessage(assessDifficulty(predefinedTiles, zoneQueue));
 };

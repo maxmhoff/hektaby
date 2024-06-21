@@ -1,4 +1,4 @@
-export type TileType = 'default' | 'commercial' | 'industrial' | 'residential' | 'park' | 'power plant' | 'forrest' | 'ocean' | 'mountain';
+export type TileType = 'default' | 'commercial' | 'industrial' | 'residential' | 'park' | 'power plant' | 'school' | 'decoration';
 
 type Tile = {
     tileIndex: number,
