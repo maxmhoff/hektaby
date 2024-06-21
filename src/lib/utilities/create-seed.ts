@@ -9,7 +9,7 @@ function createSeed(): string {
     const lastWord = approvedSeeds.lastWords[Math.round(Math.random() * approvedSeeds.lastWords.length)];
 
     // to ensure we don't get the same theme twice in a row
-    if (getThemeFromTag(firstWord).themeName === get(islandTheme).themeName) return createSeed();
+    if (getThemeFromTag(firstWord)?.themeName === get(islandTheme).themeName) return createSeed();
 
     return `${firstWord}-${secondWord}-${lastWord}`;
 }
