@@ -1,4 +1,4 @@
-import { getAllThemeTags } from "./island-themes";
+import { getAllThemeTags } from './island-themes';
 
 const approvedSeeds = {
 	firstWords: getAllThemeTags(),

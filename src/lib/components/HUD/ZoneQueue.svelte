@@ -36,9 +36,13 @@
         position: absolute;
         bottom: 3rem;
         width: 100%;
-        padding: $container-padding;
+        padding: $container-padding-mobile;
         pointer-events: none;
         user-select: none;
+
+        @media (min-width: $tablet) {
+			padding: $container-padding-desktop;
+		}
 
 		&__list {
             width: fit-content;
