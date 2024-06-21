@@ -133,8 +133,6 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 	}
 
 	const solution = currentStates[0];
-		
-
 
 	return {
 		score: solution.score,

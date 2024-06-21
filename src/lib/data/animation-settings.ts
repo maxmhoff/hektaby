@@ -13,13 +13,14 @@ const animationSettings = {
 		duration: 600,
 		easing: quadOut
 	},
-	hover: { 
-        duration: 400, easing: quartOut
-    },
-    flipTile: {
-        duration: 600,
-        easing: quadInOut
-    }
+	hover: {
+		duration: 400,
+		easing: quartOut
+	},
+	flipTile: {
+		duration: 600,
+		easing: quadInOut
+	}
 };
 
 export default animationSettings;
