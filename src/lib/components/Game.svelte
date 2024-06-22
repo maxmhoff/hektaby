@@ -61,6 +61,19 @@
 		clearCurrentGame();
 	}
 
+	async function share() {
+		let stars = '';
+		if ($difficulties) {
+			stars = `${$score >= $difficulties.easy ? '⭐' : ''}${$score >= $difficulties.medium ? '⭐' : ''}${$score >= $difficulties.hard ? '⭐' : ''}`
+		}
+		const textToCopy = `I scored ${$score} points${stars ? ` (${stars})` : ''} on ${formatSeed($seed)}! Can you beat me? Play now: ${window.location.href}`;
+		try {
+			await navigator.clipboard.writeText(textToCopy);
+		} catch (err) {
+			console.error('Failed to copy text: ', err);
+		}
+	}
+
 	async function loadWorker() {
 		const AssessDifficultyWorker = await import('$lib/utilities/assess-difficulty.worker?worker');
 		assessDifficultyWorker = new AssessDifficultyWorker.default();

@@ -3,7 +3,7 @@
 	import { DEG2RAD } from 'three/src/math/MathUtils';
 	import { T } from '@threlte/core';
 	import { HTML, interactivity } from '@threlte/extras';
-	import { score, tiles, zoneQueue } from '$lib/stores/gameStore';
+	import { score, showAIDebugger, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import calculateScore from '$lib/utilities/calculate-score';
 	import GridTileModel from './GridTileModel.svelte';
 	import deepCloneArray from '$lib/utilities/deepclone-array';
@@ -140,6 +140,14 @@
 				</p>
 			</HTML>
 		{/if}
+<<<<<<< Updated upstream
+=======
+		{#if $showAIDebugger}
+			<HTML>
+				<p class="tile__tile-index">{tile.tileIndex}</p>
+			</HTML>
+		{/if}
+>>>>>>> Stashed changes
 	</T.Mesh>
 
 	<GridTileModel tileType={tile.tileType} {defaultHeight} />
@@ -166,5 +174,17 @@
 			pointer-events: none;
 			user-select: none;
 		}
+<<<<<<< Updated upstream
+=======
+
+		&__tile-index {
+			position: absolute;
+			font-size: $text-sm;
+			color: #aaa;
+			transform: translate(-50%, 75%);
+			pointer-events: none;
+			user-select: none;
+		}
+>>>>>>> Stashed changes
 	}
 </style>
