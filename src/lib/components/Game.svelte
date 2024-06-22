@@ -10,7 +10,7 @@
 	import Island from '$lib/components/3d-experience/Island.svelte';
 	import Lighting from '$lib/components/3d-experience/Lighting.svelte';
 	import Skybox from '$lib/components/3d-experience/Skybox.svelte';
-	import Star from '$lib/components/HUD/Star.svelte';
+	import Star from '$lib/components/Star.svelte';
 	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import Water from '$lib/components/3d-experience/Water.svelte';
 	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';

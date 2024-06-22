@@ -15,10 +15,10 @@
         <p class="ai-debugger__title">AI Debugger</p>
         <button class="ai-debugger__close" on:click={() => (showAIDebugger.set(false))}>&#x2715</button>
         <hr class="ai-debugger__hr" />
-        <p class="ai-debugger__item">{`state: "${$aiSolution.state}"`}</p>
-        <p class="ai-debugger__item">{`score: ${$aiSolution.score}`}</p>
-        <p class="ai-debugger__item">{`tileOrder: ${$aiSolution.tileOrder.join(', ')}`}</p>
-        <p class="ai-debugger__item">{`elapsed time: ${Math.round($aiSolution.elapsedTime * 100) / 100} seconds`}</p>
+        <p class="ai-debugger__item">state: {$aiSolution.state}</p>
+        <p class="ai-debugger__item">score: {$aiSolution.score}</p>
+        <p class="ai-debugger__item">tileOrder:<br />{$aiSolution.tileOrder.join(', ')}</p>
+        <p class="ai-debugger__item">elapsed time: {Math.round($aiSolution.elapsedTime * 100) / 100} seconds</p>
     </div>
 {/if}
 
@@ -27,10 +27,11 @@
 
     .ai-debugger {
         position: fixed;
+        width: 320px;
         left: 2rem;
         bottom: 2rem;
         padding: 1rem;
-        background-color: rgba(0 0 0 / 80%);
+        background-color: $helper-bg;
         border-radius: 1rem;
         color: white;
         user-select: none;

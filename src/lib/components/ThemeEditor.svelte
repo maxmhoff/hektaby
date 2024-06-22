@@ -237,7 +237,7 @@
 		display: flex;
 		flex-flow: column;
 		gap: 0.5rem;
-		background-color: rgba(0 0 0 / 80%);
+		background-color: $helper-bg;;
 		position: fixed;
 		width: 400px;
 		top: 50%;
