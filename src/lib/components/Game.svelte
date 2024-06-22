@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { scale } from 'svelte/transition';
 	import { Canvas } from '@threlte/core';
-	import { difficulties, gameState, islandTheme, score, seed, tiles, zoneQueue } from '$lib/stores/gameStore';
+	import { aiSolution, difficulties, gameState, islandTheme, score, seed, specialZones, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import createSeed from '$lib/utilities/create-seed';
 	import { getThemeFromTag } from '$lib/data/island-themes';
 	import Camera from '$lib/components/3d-experience/Camera.svelte';
@@ -15,6 +15,8 @@
 	import Water from '$lib/components/3d-experience/Water.svelte';
 	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';
 	import ThemeEditor from './ThemeEditor.svelte';
+	import formatSeed from '$lib/utilities/format-seed';
+	import AIDebugger from '$lib/components/AIDebugger.svelte';
 
 	let assessDifficultyWorker: Worker | undefined = undefined;
 	let dialog: HTMLDialogElement;
@@ -26,7 +28,7 @@
 		computedSeed = $seed;
 		const themeName = $seed.split('-')[0];
 		const theme = getThemeFromTag(themeName);
-		if(themeName && theme) {
+		if (theme) {
 			islandTheme.set(theme);
 		}
 	}
@@ -51,6 +53,7 @@
 		isOpen = false;
 		clearCurrentGame();
 		difficulties.set(undefined);
+		specialZones.set(0);
 		seed.set(createSeed());
 		goto(`/${$seed}`);
 	}
@@ -75,15 +78,17 @@
 	}
 
 	async function loadWorker() {
+		aiSolution.set({state: 'loading', score: 0, elapsedTime: 0, tileOrder: []});
 		const AssessDifficultyWorker = await import('$lib/utilities/assess-difficulty.worker?worker');
 		assessDifficultyWorker = new AssessDifficultyWorker.default();
 		assessDifficultyWorker.onmessage = onMessage;
 		assessDifficultyWorker.postMessage({ predefinedTiles: $tiles, zoneQueue: $zoneQueue });
 	}
 
-	function onMessage(event: { data: { easy: number; medium: number; hard: number } }) {
-		const { easy, medium, hard } = event.data;
-		difficulties.set({ easy, medium, hard });
+	function onMessage(event: { data: { elapsedTime: number, tileOrder: number[], score: number} }) {
+		const { elapsedTime, tileOrder, score } = event.data;
+		aiSolution.set({state: 'ready', score, elapsedTime, tileOrder});
+		difficulties.set({easy: Math.round(.5 * score), medium: Math.round(.8 * score), hard: Math.round(1 * score)});
 	}
 </script>
 
@@ -116,11 +121,13 @@
 			{/if}
 		</div>
 		<div class="game__dialog-actions">
-			<button class="game__dialog-button" on:click={() => startNewGame()}>New Game</button>
-			<button class="game__dialog-button" on:click={() => resetCurrentGame()}>Try Again</button>
+			<button class="game__dialog-button" on:click={() => resetCurrentGame()}>Try Again</button>	
+			<button class="game__dialog-button" on:click={() => startNewGame()}>New Island</button>
+			<button class="game__dialog-button" on:click={() => share()}>Share</button>
 		</div>
 	</dialog>
 	<ThemeEditor />
+	<AIDebugger />
 </div>
 
 <style lang="scss">

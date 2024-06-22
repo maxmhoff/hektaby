@@ -30,10 +30,12 @@
 
     .score {
         position: relative;
+        height: 4rem;
         width: 4rem;
         
         @media (min-width: $tablet) {
             width: 5rem;
+            height: 5rem;
         }
 
         &__tweened-score {

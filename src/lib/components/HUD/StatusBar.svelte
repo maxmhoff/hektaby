@@ -1,18 +1,8 @@
 <script lang="ts">
-	import { score, seed } from '$lib/stores/gameStore';
+	import { seed } from '$lib/stores/gameStore';
 	import '$lib/styles/variables.scss';
+	import formatSeed from '$lib/utilities/format-seed';
 	import Score from './Score.svelte';
-
-	function capitalize(str: string) {
-		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
-
-	function formatSeed(str: string) {
-		const seedStringArray = str.split('-');
-		return `${capitalize(seedStringArray[0])} ${capitalize(seedStringArray[1])} ${capitalize(
-			seedStringArray[2]
-		)}`;
-	}
 </script>
 
 <div class="status-bar">
@@ -24,24 +14,27 @@
 	@use '$lib/styles/variables.scss' as *;
 
 	.status-bar {
+		display: flex;
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		max-width: $container-max-width;
-		display: flex;
 		justify-content: space-between;
 		align-items: center;
+        padding: $container-padding-mobile;
 		margin-right: auto;
 		margin-left: auto;
-        padding: $container-padding;
 		color: white;
 		pointer-events: none;
 		user-select: none;
 
+		@media (min-width: $tablet) {
+			padding: $container-padding-desktop;
+		}
+
 		&__map-title {
 			font-size: $text-md;
-			margin-bottom: 1rem;
 
 			@media (min-width: $tablet) {
 				font-size: $text-lg;

@@ -17,6 +17,7 @@
 
 	let adjencyBonus: number;
 	let color = 'grey';
+	let showIndex = false;
 
 	const defaultHeight = 0.4;
 	let height = tweened(defaultHeight, animationSettings.hover);
@@ -42,7 +43,8 @@
 				setTimeout(() => {
 					color = zoneColors.industrial.base;
 				}, animationSettings.flipTile.duration * 0.6);
-			if (tile.tileType === 'power plant') color = zoneColors.special.base;
+			if (['power plant', 'school', 'park'].includes(tile.tileType))
+				color = zoneColors.special.base;
 		} else {
 			const nextZone = $zoneQueue[$zoneQueue.length - 1];
 			if (nextZone === 'residential') color = zoneColors.residential.selected;
@@ -64,16 +66,19 @@
 	}
 
 	function activateTile() {
-		tile.value = calculateScore(tile);
+		tile.value = calculateScore($tiles, {
+			...tile,
+			tileType: $zoneQueue[$zoneQueue.length - 1]
+		});
 		const newTiles = deepCloneArray($tiles);
 		newTiles.forEach((t) => {
 			if (typeof tile.adjacentTiles.find((idx) => idx === t.tileIndex) === 'number') {
-				return t.state = 'highlight';
+				return (t.state = 'highlight');
 			}
 			if (t.tileIndex === tile.tileIndex) {
-				return t.state = 'active';
+				return (t.state = 'active');
 			}
-			return t.state = 'default';
+			return (t.state = 'default');
 		});
 		tiles.set(newTiles);
 	}
@@ -88,7 +93,7 @@
 		}
 
 		const newTiles = deepCloneArray($tiles);
-		newTiles.forEach(t => t.state = 'default');
+		newTiles.forEach((t) => (t.state = 'default'));
 		tiles.set(newTiles);
 
 		score.set($score + tile.value);
@@ -110,11 +115,18 @@
 		adjencyBonus = calculateAdjacencyBonus(tile);
 	}
 
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === '.' && event.ctrlKey) {
+			showIndex = !showIndex;
+		}
+	}
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <T.Group
 	scale={$scale}
-	rotation.x={tile.tileType !== 'power plant' ? $rotationX : 0}
+	rotation.x={!['power plant', 'school', 'park'].includes(tile.tileType) ? $rotationX : 0}
 	position={[tile.position.x, boardPositionY + $height / 2, tile.position.z]}
 >
 	<T.Mesh
@@ -127,27 +139,28 @@
 		<T.MeshStandardMaterial {color} />
 		{#if tile.state === 'active'}
 			<HTML>
-				<p class="tile__score">{tile.value}
-				</p>
+				<p class="tile__score">{tile.value}</p>
 			</HTML>
 		{/if}
 		{#if tile.state === 'highlight' && adjencyBonus !== 0}
 			<HTML>
-				<p class={`tile__adjacency-bonus ${adjencyBonus > 0 ? 'tile__adjacency-bonus--positive' : 'tile__adjacency-bonus--negative'}`}>
-					{#if adjencyBonus > 0}<span>+{adjencyBonus}</span>
-					{:else}<span>{adjencyBonus}</span>
+				<p
+					class={`tile__adjacency-bonus ${
+						adjencyBonus > 0 ? 'tile__adjacency-bonus--positive' : 'tile__adjacency-bonus--negative'
+					}`}
+				>
+					{#if adjencyBonus > 0}+{adjencyBonus}
+					{:else}{adjencyBonus}
 					{/if}
 				</p>
 			</HTML>
 		{/if}
-<<<<<<< Updated upstream
-=======
 		{#if $showAIDebugger}
+
 			<HTML>
 				<p class="tile__tile-index">{tile.tileIndex}</p>
 			</HTML>
 		{/if}
->>>>>>> Stashed changes
 	</T.Mesh>
 
 	<GridTileModel tileType={tile.tileType} {defaultHeight} />
@@ -174,8 +187,6 @@
 			pointer-events: none;
 			user-select: none;
 		}
-<<<<<<< Updated upstream
-=======
 
 		&__tile-index {
 			position: absolute;
@@ -185,6 +196,5 @@
 			pointer-events: none;
 			user-select: none;
 		}
->>>>>>> Stashed changes
 	}
 </style>

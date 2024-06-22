@@ -6,7 +6,7 @@ export type IslandThemeColors = {
 	waterColorTwo: string;
 };
 
-export type IslandTheme = { colors: IslandThemeColors; designer: string; tags: string[]; };
+export type IslandTheme = { colors: IslandThemeColors; designer: string; tags: string[] };
 
 export type IslandThemes = Record<string, IslandTheme>;
 
@@ -20,7 +20,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#caff9e'
 		},
 		designer: 'VuFFeR',
-		tags: ['acid', 'polluted', 'toxic'],
+		tags: ['acid', 'polluted', 'toxic']
 	},
 	babyshower: {
 		colors: {
@@ -28,10 +28,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#ffe5e5',
 			skyColorTwo: '#9eecff',
 			waterColorOne: '#adebff',
-			waterColorTwo: '#f6cdfe',
+			waterColorTwo: '#f6cdfe'
 		},
 		designer: 'VuFFeR',
-		tags: ['futuristic', 'pink'],
+		tags: ['futuristic', 'pink']
 	},
 	beach: {
 		colors: {
@@ -39,10 +39,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#ffebb3',
 			skyColorTwo: '#bddfff',
 			waterColorOne: '#5ca8ff',
-			waterColorTwo: '#a3d9ff',
+			waterColorTwo: '#a3d9ff'
 		},
 		designer: 'VuFFeR',
-		tags: ['blazing', 'hot', 'sandy', 'sunny'],
+		tags: ['blazing', 'hot', 'sandy', 'sunny']
 	},
 	brocante: {
 		colors: {
@@ -50,10 +50,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#e1c8e4',
 			skyColorTwo: '#faf3f0',
 			waterColorOne: '#f1fff0',
-			waterColorTwo: '#d1e6e0',
+			waterColorTwo: '#d1e6e0'
 		},
 		designer: 'KatteFimz',
-		tags: ['faded', 'delicate', 'elegant', 'lovely'],
+		tags: ['faded', 'delicate', 'elegant', 'lovely']
 	},
 	candy: {
 		colors: {
@@ -61,10 +61,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#af96e8',
 			skyColorTwo: '#dd9cb3',
 			waterColorOne: '#2c79dd',
-			waterColorTwo: '#f5a3cb',
+			waterColorTwo: '#f5a3cb'
 		},
 		designer: 'Frida',
-		tags: ['salmon', 'sugar'],
+		tags: ['salmon', 'sugar']
 	},
 	emerald: {
 		colors: {
@@ -72,10 +72,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#62d2da',
 			skyColorTwo: '#d6fffe',
 			waterColorOne: '#25c192',
-			waterColorTwo: '#73f7d6',
+			waterColorTwo: '#73f7d6'
 		},
 		designer: 'VuFFeR',
-		tags: ['emerald', 'green', 'peaceful'],
+		tags: ['emerald', 'green', 'peaceful']
 	},
 	exotic: {
 		colors: {
@@ -83,10 +83,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#ecdb69',
 			skyColorTwo: '#ffe5f7',
 			waterColorOne: '#50bfce',
-			waterColorTwo: '#aeeae9',
+			waterColorTwo: '#aeeae9'
 		},
 		designer: 'VuFFeR',
-		tags: ['colourful', 'crazy', 'exotic', 'tropical', 'warm'],
+		tags: ['colourful', 'crazy', 'exotic', 'tropical', 'warm']
 	},
 	fuchsia: {
 		colors: {
@@ -97,7 +97,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#e187f2'
 		},
 		designer: 'VuFFeR',
-		tags: ['fuchsia', 'breathtaking', 'majestic'],
+		tags: ['fuchsia', 'breathtaking', 'majestic']
 	},
 	jungle: {
 		colors: {
@@ -105,10 +105,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#80ace5',
 			skyColorTwo: '#1e180a',
 			waterColorOne: '#26e36f',
-			waterColorTwo: '#20620e',
+			waterColorTwo: '#20620e'
 		},
 		designer: 'Autoghost',
-		tags: ['humid', 'overgrown'],
+		tags: ['humid', 'overgrown']
 	},
 	lillith: {
 		colors: {
@@ -119,7 +119,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#a92323'
 		},
 		designer: 'DeadlyMouse',
-		tags: ['blood', 'red'],
+		tags: ['blood', 'red']
 	},
 	marble: {
 		colors: {
@@ -127,10 +127,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#accafb',
 			skyColorTwo: '#ffffff',
 			waterColorOne: '#73c8dd',
-			waterColorTwo: '#b7e6f5',
+			waterColorTwo: '#b7e6f5'
 		},
 		designer: 'KatteFimz',
-		tags: ['bright', 'foggy', 'marble', 'mediterranean', 'misty', 'quiet'],
+		tags: ['bright', 'foggy', 'marble', 'mediterranean', 'misty', 'quiet']
 	},
 	paradise: {
 		colors: {
@@ -138,10 +138,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#ecdb69',
 			skyColorTwo: '#ffffff',
 			waterColorOne: '#ff0000',
-			waterColorTwo: '#00c2bf',
+			waterColorTwo: '#00c2bf'
 		},
 		designer: 'RelaxingLaw',
-		tags: ['soothing'],
+		tags: ['soothing']
 	},
 	retro: {
 		colors: {
@@ -152,7 +152,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#ed7b7b'
 		},
 		designer: 'VuFFeR',
-		tags: ['old', 'forgotten', 'charming'],
+		tags: ['old', 'forgotten', 'charming']
 	},
 	sapphire: {
 		colors: {
@@ -160,10 +160,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#d6f3ff',
 			skyColorTwo: '#81c1fe',
 			waterColorOne: '#76b8fe',
-			waterColorTwo: '#ecf7fe',
+			waterColorTwo: '#ecf7fe'
 		},
 		designer: 'VuFFeR',
-		tags: ['royal', 'sapphire'],
+		tags: ['royal', 'sapphire']
 	},
 	storm: {
 		colors: {
@@ -174,7 +174,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#90c1e4'
 		},
 		designer: 'VuFFeR',
-		tags: ['cloudy', 'grey', 'stormy', 'thunderous', 'windy'],
+		tags: ['cloudy', 'grey', 'stormy', 'thunderous', 'windy']
 	},
 	sunset: {
 		colors: {
@@ -185,7 +185,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#9cd6ff'
 		},
 		designer: 'VuFFeR',
-		tags: ['calm', 'crisp', 'sunset'],
+		tags: ['calm', 'crisp', 'sunset']
 	},
 	volcano: {
 		colors: {
@@ -196,7 +196,7 @@ const islandThemes: IslandThemes = {
 			waterColorTwo: '#f4e68b'
 		},
 		designer: 'VuFFeR',
-		tags: ['fiery', 'roasting', 'scorched', 'toasty', 'volcanic'],
+		tags: ['fiery', 'roasting', 'scorched', 'toasty', 'volcanic']
 	},
 	winter: {
 		colors: {
@@ -204,10 +204,10 @@ const islandThemes: IslandThemes = {
 			skyColorOne: '#97afd1',
 			skyColorTwo: '#b5cae8',
 			waterColorOne: '#82aff5',
-			waterColorTwo: '#b1cffc',
+			waterColorTwo: '#b1cffc'
 		},
 		designer: 'VuFFeR',
-		tags: ['arctic', 'cold', 'cool', 'freezing', 'frosty', 'snowy'],
+		tags: ['arctic', 'cold', 'cool', 'freezing', 'frosty', 'snowy']
 	}
 };
 
