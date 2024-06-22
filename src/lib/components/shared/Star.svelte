@@ -19,7 +19,7 @@
 
 <style lang="scss">
     .star {
-        fill: hsl(51, 98%, 100%);
+        fill: hsla(0, 0%, 100%, 0.25);
         &--fill {
             fill: hsl(51, 98%, 50%);
         }

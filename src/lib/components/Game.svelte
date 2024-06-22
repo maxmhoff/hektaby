@@ -4,23 +4,24 @@
 	import { Canvas } from '@threlte/core';
 	import { aiSolution, difficulties, gameState, islandTheme, score, seed, specialZones, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import createSeed from '$lib/utilities/create-seed';
+	import formatSeed from '$lib/utilities/format-seed';
 	import { getThemeFromTag } from '$lib/data/island-themes';
 	import Camera from '$lib/components/3d-experience/Camera.svelte';
 	import HexagonGrid from '$lib/components/3d-experience/HexagonGrid.svelte';
 	import Island from '$lib/components/3d-experience/Island.svelte';
 	import Lighting from '$lib/components/3d-experience/Lighting.svelte';
 	import Skybox from '$lib/components/3d-experience/Skybox.svelte';
-	import Star from '$lib/components/Star.svelte';
+	import Star from '$lib/components/shared/Star.svelte';
 	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import Water from '$lib/components/3d-experience/Water.svelte';
 	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';
-	import ThemeEditor from './ThemeEditor.svelte';
-	import formatSeed from '$lib/utilities/format-seed';
-	import AIDebugger from '$lib/components/AIDebugger.svelte';
+	import AIDebugger from '$lib/components/HUD/AIDebugger.svelte';
+	import ThemeEditor from '$lib/components/HUD/ThemeEditor.svelte';
+	import Button from '$lib/components/shared/Button.svelte';
 
 	let assessDifficultyWorker: Worker | undefined = undefined;
-	let dialog: HTMLDialogElement;
 	let isOpen = false;
+	let animateStars = false;
 	let computedSeed = '';
 
 	$: if ($seed !== computedSeed && $gameState === 'in progress') {
@@ -36,8 +37,10 @@
 	$: if ($zoneQueue.length === 0 && $gameState === 'in progress') {
 		gameState.set('finished');
 		setTimeout(() => {
-			dialog?.showModal();
 			isOpen = true;
+			setTimeout(() => {
+				animateStars = true;
+			}, 0);
 		}, 400);
 	}
 
@@ -49,8 +52,8 @@
 	}
 
 	function startNewGame() {
-		dialog.close();
 		isOpen = false;
+		animateStars = false;
 		clearCurrentGame();
 		difficulties.set(undefined);
 		specialZones.set(0);
@@ -59,8 +62,8 @@
 	}
 
 	function resetCurrentGame() {
-		dialog.close();
 		isOpen = false;
+		animateStars = false;
 		clearCurrentGame();
 	}
 
@@ -103,29 +106,31 @@
 		<HexagonGrid />
 	</Canvas>
 	<ZoneQueue />
-	<dialog class="game__dialog" bind:this={dialog}>
-		<p class="game__final-score">Your final score was: {$score}</p>
-		<div class="game__dialog-stars">
-			{#if $difficulties && isOpen}
-				<span in:scale={{ duration: 300, delay: 100 * 0 + 250 }}>
-					<Star hasFill={$score >= $difficulties.easy} />
-				</span>
-				<span in:scale={{ duration: 300, delay: 100 * 1 + 250 }}>
-					<Star hasFill={$score >= $difficulties.medium} />
-				</span>
-				<span in:scale={{ duration: 300, delay: 100 * 2 + 250 }}>
-					<Star hasFill={$score >= $difficulties.hard} />
-				</span>
-			{:else}
-				<p>Loading</p>
-			{/if}
+	{#if isOpen}
+		<div class="game__endscreen">
+			<p class="game__final-score">Final score: {$score}</p>
+			<div class="game__endscreen-stars">
+				{#if $difficulties && animateStars}
+					<span in:scale={{ duration: 300, delay: 100 * 0 + 250 }}>
+						<Star hasFill={$score >= $difficulties.easy} />
+					</span>
+					<span in:scale={{ duration: 300, delay: 100 * 1 + 250 }}>
+						<Star hasFill={$score >= $difficulties.medium} />
+					</span>
+					<span in:scale={{ duration: 300, delay: 100 * 2 + 250 }}>
+						<Star hasFill={$score >= $difficulties.hard} />
+					</span>
+				{:else}
+					<p>Loading</p>
+				{/if}
+			</div>
+			<div class="game__endscreen-actions">
+				<Button onClick={resetCurrentGame}>Try Again</Button>
+				<Button onClick={startNewGame}>New Island</Button>
+				<Button onClick={share}>Share</Button>
+			</div>
 		</div>
-		<div class="game__dialog-actions">
-			<button class="game__dialog-button" on:click={() => resetCurrentGame()}>Try Again</button>	
-			<button class="game__dialog-button" on:click={() => startNewGame()}>New Island</button>
-			<button class="game__dialog-button" on:click={() => share()}>Share</button>
-		</div>
-	</dialog>
+	{/if}
 	<ThemeEditor />
 	<AIDebugger />
 </div>
@@ -141,44 +146,41 @@
 		height: 100vh;
 		overflow: hidden;
 
-		&__dialog {
-			user-select: none;
-			background-color: #fffffffe;
+		&__endscreen {
+			position: absolute;
+			inset: 0;
+			margin: auto;
+			width: 340px;
+			height: 394px;
+			padding: 2rem;
+			background-color: $overlay;
 			border-radius: 1rem;
-			&::backdrop {
-				background-color: transparent;
+			border: none;
+			user-select: none;
+			@media (min-width: $tablet) {
+				width: 360px;
 			}
 		}
 
 		&__final-score {
 			font-size: $text-md;
+			color: white;
+			letter-spacing: .125rem;
 			margin-bottom: 2rem;
 		}
 
-		&__dialog-stars {
+		&__endscreen-stars {
 			display: flex;
 			width: 100%;
 			justify-content: space-evenly;
 			margin-bottom: 2rem;
 		}
 
-		&__dialog-actions {
+		&__endscreen-actions {
 			display: flex;
+			flex-flow: column;
 			gap: 1rem;
 			justify-content: space-between;
-		}
-
-		&__dialog-button {
-			padding: 0.5rem 2rem;
-			border: 2px solid black;
-			border-radius: 1rem;
-			background: white;
-			&:hover,
-			&:focus-visible {
-				color: white;
-				background-color: black;
-				cursor: pointer;
-			}
 		}
 	}
 </style>

@@ -12,7 +12,7 @@
 
 {#if $showAIDebugger === true}
     <div class="ai-debugger">
-        <p class="ai-debugger__title">AI Debugger</p>
+        <p class="ai-debugger__title">AI Debugger 🤖</p>
         <button class="ai-debugger__close" on:click={() => (showAIDebugger.set(false))}>&#x2715</button>
         <hr class="ai-debugger__hr" />
         <p class="ai-debugger__item">state: {$aiSolution.state}</p>
@@ -31,7 +31,7 @@
         left: 2rem;
         bottom: 2rem;
         padding: 1rem;
-        background-color: $helper-bg;
+        background-color: $overlay;
         border-radius: 1rem;
         color: white;
         user-select: none;
