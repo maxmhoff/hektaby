@@ -13,6 +13,7 @@
 	const factory = useGltf(`${path}factory.gltf`, { useDraco: true });
 	const powerPlant = useGltf(`${path}power-plant.gltf`, { useDraco: true });
 	const park = useGltf(`${path}park.gltf`, { useDraco: true });
+	const school = useGltf(`${path}school.gltf`, { useDraco: true });
 </script>
 
 <!-- https://gltf.pmnd.rs/ to get scale & rotation of individual meshes -->
@@ -204,7 +205,7 @@
 {/if}
 
 {#if tileType === 'park' && $park}
-	<T.Group position.z={.2} rotation.y={DEG2RAD * 100}>
+	<T.Group position.z={1.2} rotation.y={DEG2RAD * 100} scale={.75}>
 		<T.Mesh
 		  castShadow
 		  receiveShadow
@@ -356,5 +357,84 @@
 		  rotation={[-3.019, -1.412, 1.456]}
 		  scale={1.409}
 		/>
+  </T.Group>
+{/if}
+{#if tileType === 'school' && $school}
+<T.Group scale={.3} position.z={1} rotation.y={DEG2RAD * -140} >
+	<T.Group position={[-0.584, 3.619, -0.125]} scale={4}>
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cube001.geometry}
+		material={$school.materials.Material}
+	  />
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cube001_1.geometry}
+		material={$school.materials.Glass}
+	  />
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cube001_2.geometry}
+		material={$school.materials.Wood}
+	  />
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cube001_3.geometry}
+		material={$school.materials.Roof}
+	  />
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cube001_4.geometry}
+		material={$school.materials.Stone}
+	  />
+	</T.Group>
+	<T.Mesh
+	  castShadow
+	  receiveShadow
+	  geometry={$school.nodes.Cylinder.geometry}
+	  material={$school.nodes.Cylinder.material}
+	  position={[5.799, 3.914, -1.089]}
+	  rotation={[Math.PI / 2, 0, -Math.PI / 2]}
+	  scale={0.1}
+	/>
+	<T.Group
+	  position={[-0.493, 4.074, -6.946]}
+	  rotation={[Math.PI / 2, 0, 0]}
+	  scale={[2.48, 0.236, 2.48]}>
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cylinder002.geometry}
+		material={$school.materials.Wood}
+	  />
+	  <T.Mesh
+		castShadow
+		receiveShadow
+		geometry={$school.nodes.Cylinder002_1.geometry}
+		material={$school.materials.Glass}
+	  />
+	</T.Group>
+	<T.Mesh
+	  castShadow
+	  receiveShadow
+	  geometry={$school.nodes.Cube002.geometry}
+	  material={$school.materials.Wood}
+	  position={[-0.642, 3.95, -7.168]}
+	  scale={[0.16, 2.3, 0.03]}
+	/>
+	<T.Mesh
+	  castShadow
+	  receiveShadow
+	  geometry={$school.nodes.Cube003.geometry}
+	  material={$school.materials.Wood}
+	  position={[-0.642, 3.95, -7.168]}
+	  rotation={[0.001, 0.005, -1.562]}
+	  scale={[0.16, 2.3, 0.03]}
+	/>
   </T.Group>
 {/if}
