@@ -360,8 +360,8 @@
 	</T.Group>
 {/if}
 {#if tileType === 'school' && $school}
-	<T.Group scale={.35} rotation.y={DEG2RAD * -100} >
-		<T.Group position={[-0.203, 3, 0]} scale={3}>
+	<T.Group scale={.315} position.y={.2} rotation.y={DEG2RAD * 180}>
+		<T.Group position={[0, 3, 0]} scale={3}>
 			<T.Mesh
 				castShadow
 				receiveShadow
@@ -372,25 +372,31 @@
 				castShadow
 				receiveShadow
 				geometry={$school.nodes.Cube_2.geometry}
-				material={$school.materials.Roof}
+				material={$school.materials.Door}
 			/>
 			<T.Mesh
 				castShadow
 				receiveShadow
 				geometry={$school.nodes.Cube_3.geometry}
-				material={$school.materials.White}
+				material={$school.materials.Roof}
 			/>
 			<T.Mesh
 				castShadow
 				receiveShadow
 				geometry={$school.nodes.Cube_4.geometry}
-				material={$school.materials.Stone}
+				material={$school.materials.Sign}
 			/>
 			<T.Mesh
 				castShadow
 				receiveShadow
 				geometry={$school.nodes.Cube_5.geometry}
-				material={$school.materials.Text}
+				material={$school.materials['Building Alt']}
+			/>
+			<T.Mesh
+				castShadow
+				receiveShadow
+				geometry={$school.nodes.Cube_6.geometry}
+				material={$school.materials.Floor}
 			/>
 		</T.Group>
 		<T.Mesh
@@ -398,8 +404,8 @@
 			receiveShadow
 			geometry={$school.nodes.Text.geometry}
 			material={$school.materials.Text}
-			position={[2.879, 7.604, 1.826]}
-			rotation={[Math.PI / 2, 0, -Math.PI / 2]}
+			position={[1.446, 8.721, -3.015]}
+			rotation={[Math.PI / 2, 0, Math.PI]}
 		/>
 	</T.Group>
 {/if}
