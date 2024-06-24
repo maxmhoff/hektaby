@@ -43,8 +43,12 @@
 				setTimeout(() => {
 					color = zoneColors.industrial.base;
 				}, animationSettings.flipTile.duration * 0.6);
-			if (['power plant', 'school', 'park'].includes(tile.tileType))
-				color = zoneColors.special.base;
+			if (tile.tileType === 'park')
+				color = zoneColors.park.base;
+			if (tile.tileType === 'power plant')
+				color = zoneColors.powerplant.base;
+			if (tile.tileType === 'school')
+				color = zoneColors.school.base;
 		} else {
 			const nextZone = $zoneQueue[$zoneQueue.length - 1];
 			if (nextZone === 'residential') color = zoneColors.residential.selected;

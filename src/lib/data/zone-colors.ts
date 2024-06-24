@@ -17,8 +17,14 @@ const zoneColors = {
 		selected: '#d4b998',
 		hud: '#b19165'
 	},
-	special: {
+	park: {
+		base: '#c4a8d3'
+	},
+	powerplant: {
 		base: '#666666'
+	},
+	school: {
+		base: '#d8c38a'
 	}
 };
 
