@@ -4,7 +4,7 @@
 
 <T.AmbientLight intensity={1.5} />
 <T.DirectionalLight
-	position={[-2, 15, 10]}
+	position={[-2, 16, 10]}
 	intensity={2.2}
 	castShadow
 	shadow.camera.top={22}
