@@ -157,53 +157,6 @@
 	</T.Group>
 {/if}
 
-{#if tileType === 'power plant' && $powerPlant}
-	<T.Group
-		scale={0.6}
-		position.x={1.7}
-		position.y={defaultHeight / 2}
-		position.z={-0.5}
-		rotation.y={DEG2RAD * -60}
-	>
-		<T.Mesh
-			castShadow
-			geometry={$powerPlant.nodes.Building.geometry}
-			material={$powerPlant.nodes.Building.material}
-			position={[1, 2, 0]}
-			scale={[3, 2, 2]}
-		/>
-		<T.Mesh
-			castShadow
-			geometry={$powerPlant.nodes.Chimney.geometry}
-			material={$powerPlant.nodes.Chimney.material}
-			position={[0, 4, 6]}
-			scale={1.591}
-		/>
-		<T.Mesh
-			castShadow
-			geometry={$powerPlant.nodes.Pipe.geometry}
-			material={$powerPlant.nodes.Pipe.material}
-			position={[0, 1.91, 4.75]}
-			rotation={[Math.PI / 2, 0, 0]}
-		/>
-
-		<T.Mesh
-			castShadow
-			geometry={$powerPlant.nodes.Ring.geometry}
-			material={$powerPlant.nodes.Ring.material}
-			position={[0, 4, 6]}
-			scale={1.591}
-		/>
-		<T.Mesh
-			castShadow
-			geometry={$powerPlant.nodes.Windows.geometry}
-			material={$powerPlant.nodes.Windows.material}
-			position={[1, 2, 0]}
-			scale={[3, 2, 2]}
-		/>
-	</T.Group>
-{/if}
-
 {#if tileType === 'park' && $park}
 	<T.Group position.z={1.2} rotation.y={DEG2RAD * 105} scale={0.75}>
 		<T.Mesh
@@ -359,6 +312,54 @@
 		/>
 	</T.Group>
 {/if}
+
+{#if tileType === 'power plant' && $powerPlant}
+	<T.Group
+		scale={0.6}
+		position.x={1.7}
+		position.y={defaultHeight / 2}
+		position.z={-0.5}
+		rotation.y={DEG2RAD * -60}
+	>
+		<T.Mesh
+			castShadow
+			geometry={$powerPlant.nodes.Building.geometry}
+			material={$powerPlant.nodes.Building.material}
+			position={[1, 2, 0]}
+			scale={[3, 2, 2]}
+		/>
+		<T.Mesh
+			castShadow
+			geometry={$powerPlant.nodes.Chimney.geometry}
+			material={$powerPlant.nodes.Chimney.material}
+			position={[0, 4, 6]}
+			scale={1.591}
+		/>
+		<T.Mesh
+			castShadow
+			geometry={$powerPlant.nodes.Pipe.geometry}
+			material={$powerPlant.nodes.Pipe.material}
+			position={[0, 1.91, 4.75]}
+			rotation={[Math.PI / 2, 0, 0]}
+		/>
+
+		<T.Mesh
+			castShadow
+			geometry={$powerPlant.nodes.Ring.geometry}
+			material={$powerPlant.nodes.Ring.material}
+			position={[0, 4, 6]}
+			scale={1.591}
+		/>
+		<T.Mesh
+			castShadow
+			geometry={$powerPlant.nodes.Windows.geometry}
+			material={$powerPlant.nodes.Windows.material}
+			position={[1, 2, 0]}
+			scale={[3, 2, 2]}
+		/>
+	</T.Group>
+{/if}
+
 {#if tileType === 'school' && $school}
 	<T.Group scale={.315} position.y={.2} rotation.y={DEG2RAD * 180}>
 		<T.Group position={[0, 3, 0]} scale={3}>
