@@ -157,6 +157,7 @@
 			border-radius: 1rem;
 			border: none;
 			user-select: none;
+			z-index: 1;
 			@media (min-width: $tablet) {
 				width: 360px;
 			}

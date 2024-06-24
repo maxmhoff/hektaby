@@ -5,13 +5,13 @@
 
 	const { progress } = useProgress();
 	const tweenedProgress = tweened($progress, {
-		duration: 200
+		duration: 500
 	});
 	$: tweenedProgress.set($progress);
 </script>
 
 {#if $tweenedProgress < 1}
-	<div out:fade={{ duration: 200 }} class="load-overlay">
+	<div out:fade={{ duration: 500 }} class="load-overlay">
         <h1 class="load-overlay__title">Hektaby</h1>
 		<p class="load-overlay__label">Loading 3D assets...</p>
 		<div class="load-overlay__bar-wrapper">
