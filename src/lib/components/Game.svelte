@@ -81,16 +81,16 @@
 	}
 
 	async function loadWorker() {
-		aiSolution.set({state: 'loading', score: 0, elapsedTime: 0, tileOrder: []});
+		aiSolution.set({state: 'loading', score: 0, elapsedTime: 0, tileOrder: [], numOfHighestScoringStates: 0});
 		const AssessDifficultyWorker = await import('$lib/utilities/assess-difficulty.worker?worker');
 		assessDifficultyWorker = new AssessDifficultyWorker.default();
 		assessDifficultyWorker.onmessage = onMessage;
 		assessDifficultyWorker.postMessage({ predefinedTiles: $tiles, zoneQueue: $zoneQueue });
 	}
 
-	function onMessage(event: { data: { elapsedTime: number, tileOrder: number[], score: number} }) {
-		const { elapsedTime, tileOrder, score } = event.data;
-		aiSolution.set({state: 'ready', score, elapsedTime, tileOrder});
+	function onMessage(event: { data: { elapsedTime: number, tileOrder: number[], score: number, numOfHighestScoringStates: number} }) {
+		const { elapsedTime, tileOrder, score, numOfHighestScoringStates } = event.data;
+		aiSolution.set({state: 'ready', score, elapsedTime, tileOrder, numOfHighestScoringStates});
 		difficulties.set({easy: Math.round(.5 * score), medium: Math.round(.8 * score), hard: Math.round(1 * score)});
 	}
 </script>

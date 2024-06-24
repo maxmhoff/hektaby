@@ -131,13 +131,15 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 
 		currentStates = findMostPromisingStates(nextStates, beamSize);
 	}
-
+	const highestScore = Math.max(...currentStates.map(state => state.score));
+	const numOfHighestScoringStates = currentStates.filter(state => state.score === highestScore).length;
 	const solution = currentStates[0];
 
 	return {
 		score: solution.score,
 		tileOrder: solution.tileOrder,
-		elapsedTime: (Date.now() - start) / 1000
+		elapsedTime: (Date.now() - start) / 1000,
+		numOfHighestScoringStates: numOfHighestScoringStates,
 	};
 }
 

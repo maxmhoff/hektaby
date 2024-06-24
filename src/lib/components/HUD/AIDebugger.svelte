@@ -17,8 +17,9 @@
         <hr class="ai-debugger__hr" />
         <p class="ai-debugger__item">state: {$aiSolution.state}</p>
         <p class="ai-debugger__item">score: {$aiSolution.score}</p>
-        <p class="ai-debugger__item">tileOrder:<br />{$aiSolution.tileOrder.join(', ')}</p>
+        <p class="ai-debugger__item">solution:<br />{$aiSolution.tileOrder.join(', ')}</p>
         <p class="ai-debugger__item">elapsed time: {Math.round($aiSolution.elapsedTime * 100) / 100} seconds</p>
+        <p class="ai-debugger__item">top solutions found: {$aiSolution.numOfHighestScoringStates}</p>
     </div>
 {/if}
 

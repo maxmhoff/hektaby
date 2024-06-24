@@ -21,5 +21,6 @@ export const aiSolution: Writable<{
 	score: number;
 	elapsedTime: number;
 	tileOrder: number[];
-}> = writable({ state: 'loading', score: 0, elapsedTime: 0, tileOrder: [] });
+	numOfHighestScoringStates: number;
+}> = writable({ state: 'loading', score: 0, elapsedTime: 0, tileOrder: [], numOfHighestScoringStates: 0 });
 export const showAIDebugger: Writable<boolean> = writable(false);
