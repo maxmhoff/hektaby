@@ -55,8 +55,8 @@ function onMessage(event: {
 	});
 	difficulties.set({
 		easy: Math.round(0.5 * score),
-		medium: Math.round(0.8 * score),
-		hard: Math.round(1 * score)
+		medium: Math.round(0.7 * score),
+		hard: Math.round(0.9 * score)
 	});
 }
 

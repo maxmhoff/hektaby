@@ -103,7 +103,7 @@
 
 	.ai-debugger {
 		position: fixed;
-		width: 320px;
+		width: 340px;
 		left: 2rem;
 		bottom: 2rem;
 		padding: 1rem;
