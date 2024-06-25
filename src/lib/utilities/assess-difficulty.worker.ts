@@ -37,13 +37,15 @@ function generateChildren(state: State): State[] {
 	return childStates;
 }
 
-function findMostPromisingStates(states: State[], beamSize: number): State[] {
+function findMostPromisingStates(states: State[], beamSize: number, blueGemPotentialWeight: number): State[] {
 	if (states.length === 0) return [];
 
-	const scoredStates = states.map((state) => ({
-		state,
-		combinedScore: state.score + calcBlueGemPotential(state)
-	}));
+	const scoredStates = states.map((state) => {
+		const combinedScore = blueGemPotentialWeight > 0 
+			? state.score + blueGemPotentialWeight * calcBlueGemPotential(state) 
+			: state.score;
+		return { state, combinedScore };
+	});
 
 	return scoredStates
 		.sort((a, b) => b.combinedScore - a.combinedScore)
@@ -98,7 +100,7 @@ function generateStateKey(state: State): string {
 	return `${tileKey}-${state.score}`;
 }
 
-function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
+function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[], beamSize: number = 10000, blueGemPotentialWeight: number = 1) {
 	const start = Date.now();
 
 	const seenStates = new Set<string>();
@@ -109,7 +111,6 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 		zoneQueue: zoneQueue
 	};
 
-	const beamSize = 10000;
 	let currentDepth = 0;
 	let currentStates: State[] = [initialState];
 
@@ -129,7 +130,7 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 			});
 		});
 
-		currentStates = findMostPromisingStates(nextStates, beamSize);
+		currentStates = findMostPromisingStates(nextStates, beamSize, blueGemPotentialWeight);
 	}
 	const highestScore = Math.max(...currentStates.map(state => state.score));
 	const numOfHighestScoringStates = currentStates.filter(state => state.score === highestScore).length;
@@ -143,7 +144,7 @@ function assessDifficulty(predefinedTiles: Tile[], zoneQueue: TileType[]) {
 	};
 }
 
-onmessage = (event: { data: { predefinedTiles: Tile[]; zoneQueue: TileType[] } }) => {
-	const { predefinedTiles, zoneQueue } = event.data;
-	postMessage(assessDifficulty(predefinedTiles, zoneQueue));
+onmessage = (event: { data: { predefinedTiles: Tile[]; zoneQueue: TileType[], beamSize: number, blueGemPotentialWeight: number } }) => {
+	const { predefinedTiles, zoneQueue, beamSize, blueGemPotentialWeight } = event.data;
+	postMessage(assessDifficulty(predefinedTiles, zoneQueue, beamSize, blueGemPotentialWeight));
 };

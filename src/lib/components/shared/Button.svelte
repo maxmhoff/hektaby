@@ -13,6 +13,7 @@
 
 	.button {
 		display: inline-flex;
+		width: 100%;
 		align-items: center;
 		justify-content: center;
 		padding: .75rem 1.5rem;
@@ -33,8 +34,13 @@
 		}
 
 		&:disabled {
-			background-color: #c0c0c0;
+			color: #333;
+			background-color: #CCC;
+			border: 2px solid #CCC;
 			cursor: not-allowed;
+			&:hover {
+				color: #333;
+			}
 		}
 
         &:focus {

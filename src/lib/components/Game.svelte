@@ -5,18 +5,19 @@
 	import { aiSolution, difficulties, gameState, islandTheme, score, seed, specialZones, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import createSeed from '$lib/utilities/create-seed';
 	import formatSeed from '$lib/utilities/format-seed';
+	import loadWorker from '$lib/utilities/load-worker';
 	import { getThemeFromTag } from '$lib/data/island-themes';
 	import Camera from '$lib/components/3d-experience/Camera.svelte';
 	import HexagonGrid from '$lib/components/3d-experience/HexagonGrid.svelte';
 	import Island from '$lib/components/3d-experience/Island.svelte';
 	import Lighting from '$lib/components/3d-experience/Lighting.svelte';
 	import Skybox from '$lib/components/3d-experience/Skybox.svelte';
-	import Star from '$lib/components/shared/Star.svelte';
-	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import Water from '$lib/components/3d-experience/Water.svelte';
+	import StatusBar from '$lib/components/HUD/StatusBar.svelte';
 	import ZoneQueue from '$lib/components/HUD/ZoneQueue.svelte';
 	import AIDebugger from '$lib/components/HUD/AIDebugger.svelte';
 	import ThemeEditor from '$lib/components/HUD/ThemeEditor.svelte';
+	import Star from '$lib/components/shared/Star.svelte';
 	import Button from '$lib/components/shared/Button.svelte';
 
 	let assessDifficultyWorker: Worker | undefined = undefined;
@@ -25,7 +26,7 @@
 	let computedSeed = '';
 
 	$: if ($seed !== computedSeed && $gameState === 'in progress') {
-		loadWorker();
+		loadWorker($tiles, $zoneQueue, $aiSolution.beamSize, $aiSolution.blueGemPotentialWeight);
 		computedSeed = $seed;
 		const themeName = $seed.split('-')[0];
 		const theme = getThemeFromTag(themeName);
@@ -78,20 +79,6 @@
 		} catch (err) {
 			console.error('Failed to copy text: ', err);
 		}
-	}
-
-	async function loadWorker() {
-		aiSolution.set({state: 'loading', score: 0, elapsedTime: 0, tileOrder: [], numOfHighestScoringStates: 0});
-		const AssessDifficultyWorker = await import('$lib/utilities/assess-difficulty.worker?worker');
-		assessDifficultyWorker = new AssessDifficultyWorker.default();
-		assessDifficultyWorker.onmessage = onMessage;
-		assessDifficultyWorker.postMessage({ predefinedTiles: $tiles, zoneQueue: $zoneQueue });
-	}
-
-	function onMessage(event: { data: { elapsedTime: number, tileOrder: number[], score: number, numOfHighestScoringStates: number} }) {
-		const { elapsedTime, tileOrder, score, numOfHighestScoringStates } = event.data;
-		aiSolution.set({state: 'ready', score, elapsedTime, tileOrder, numOfHighestScoringStates});
-		difficulties.set({easy: Math.round(.5 * score), medium: Math.round(.8 * score), hard: Math.round(1 * score)});
 	}
 </script>
 
