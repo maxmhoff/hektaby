@@ -20,7 +20,6 @@
 	import Star from '$lib/components/shared/Star.svelte';
 	import Button from '$lib/components/shared/Button.svelte';
 
-	let assessDifficultyWorker: Worker | undefined = undefined;
 	let isOpen = false;
 	let animateStars = false;
 	let computedSeed = '';

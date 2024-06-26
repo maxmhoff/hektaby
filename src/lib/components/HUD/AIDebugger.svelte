@@ -1,19 +1,13 @@
 <script lang="ts">
-	import {
-		aiSolution,
-		difficulties,
-		showAIDebugger,
-		tiles,
-		zoneQueue
-	} from '$lib/stores/gameStore';
+	import { gameState, aiSolution, showAIDebugger, tiles, zoneQueue } from '$lib/stores/gameStore';
 	import Button from '$lib/components/shared/Button.svelte';
-    import loadWorker from '$lib/utilities/load-worker';
+	import loadWorker from '$lib/utilities/load-worker';
 
-	let assessDifficultyWorker: Worker | undefined = undefined;
-    
-    const customBeamSteps = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000, 10000, 15000, 20000, 25000, 50000, 75000, 100000];
-    let beamSizeIndex = customBeamSteps.indexOf($aiSolution.beamSize);
-
+	const customBeamSteps = [
+		1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 75, 100, 200, 300, 400, 500, 1000, 2000, 3000, 4000, 5000,
+		10000, 15000, 20000, 25000, 50000, 75000, 100000
+	];
+	let beamSizeIndex = customBeamSteps.indexOf($aiSolution.beamSize);
 
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === '.' && event.ctrlKey) {
@@ -23,8 +17,8 @@
 
 	function handleBeamSizeChange(event: Event) {
 		const target = event.target as HTMLInputElement;
-        const index = parseInt(target.value);
-        const value = customBeamSteps[index];
+		const index = parseInt(target.value);
+		const value = customBeamSteps[index];
 
 		aiSolution.update((solution) => {
 			return { ...solution, beamSize: value };
@@ -32,21 +26,22 @@
 	}
 
 	function handleBeamSizeDoubleClick() {
-        beamSizeIndex = customBeamSteps.indexOf(10000);
+		beamSizeIndex = customBeamSteps.indexOf(10000);
 		aiSolution.update((solution) => {
 			return { ...solution, beamSize: 10000 };
 		});
 	}
 
-    function handleBlueGemPotentialWeightChange(event: Event) {
-        const target = event.target as HTMLInputElement;
+	function handleBlueGemPotentialWeightChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+		const value = parseFloat(target.value);
 
-        aiSolution.update((solution) => {
-			return { ...solution, blueGemPotentialWeight: target.value };
+		aiSolution.update((solution) => {
+			return { ...solution, blueGemPotentialWeight: value };
 		});
-    }
+	}
 
-    function handleBlueGemPotentialWeightDoubleClick() {
+	function handleBlueGemPotentialWeightDoubleClick() {
 		aiSolution.update((solution) => {
 			return { ...solution, blueGemPotentialWeight: 1 };
 		});
@@ -74,25 +69,28 @@
 		<input
 			class="ai-debugger__range"
 			type="range"
-            bind:value={beamSizeIndex}
+			bind:value={beamSizeIndex}
 			min={0}
 			max={customBeamSteps.length - 1}
 			step={1}
 			on:input={handleBeamSizeChange}
 			on:dblclick={handleBeamSizeDoubleClick}
 		/>
-        <p class="ai-debugger__item">blue gem potential weight: {$aiSolution.blueGemPotentialWeight}</p>
-        <input
+		<p class="ai-debugger__item">blue gem potential weight: {$aiSolution.blueGemPotentialWeight}</p>
+		<input
 			class="ai-debugger__range"
 			type="range"
 			bind:value={$aiSolution.blueGemPotentialWeight}
 			min={0}
 			max={2}
 			step={0.1}
-            on:input={handleBlueGemPotentialWeightChange}
+			on:input={handleBlueGemPotentialWeightChange}
 			on:dblclick={handleBlueGemPotentialWeightDoubleClick}
 		/>
-		<Button disabled={$aiSolution.state === 'loading'} onClick={() => loadWorker($tiles, $zoneQueue, $aiSolution.beamSize, $aiSolution.blueGemPotentialWeight)}
+		<Button
+			disabled={$aiSolution.state === 'loading'}
+			onClick={() =>
+				loadWorker($tiles, $zoneQueue, $aiSolution.beamSize, $aiSolution.blueGemPotentialWeight)}
 			>{$aiSolution.state === 'ready' ? 'Recompute' : 'Loading'}</Button
 		>
 	</div>
@@ -159,11 +157,11 @@
 			width: 100%;
 			height: 0.5rem;
 			border-radius: 1rem;
-            margin-bottom: .5rem;
+			margin-bottom: 0.5rem;
 
-            &:last-of-type {
-                margin-bottom: 2rem;
-            }
+			&:last-of-type {
+				margin-bottom: 2rem;
+			}
 
 			&::-webkit-slider-thumb {
 				-webkit-appearance: none;
