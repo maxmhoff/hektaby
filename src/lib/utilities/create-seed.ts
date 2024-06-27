@@ -1,7 +1,7 @@
 import { getThemeFromTag } from '$lib/data/island-themes';
+import approvedSeeds from '$lib/data/approve-seeds';
 import { islandTheme } from '$lib/stores/gameStore';
 import { get } from 'svelte/store';
-import approvedSeeds from '../data/approve-seeds';
 
 function createSeed(): string {
 	const firstWord =

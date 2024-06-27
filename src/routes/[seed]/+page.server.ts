@@ -10,12 +10,10 @@ export const load = (async ({ params }) => {
 		!approvedSeeds.secondWords.includes(paramsStrings[1]) ||
 		!approvedSeeds.lastWords.includes(paramsStrings[2])
 	) {
-		
 		throw redirect(308, '/');
 	}
-	
+
 	return {
 		seed: params.seed
 	};
-	
 }) satisfies PageServerLoad;

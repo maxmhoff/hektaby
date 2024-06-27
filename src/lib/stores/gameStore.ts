@@ -16,6 +16,7 @@ export const islandTheme: Writable<{ themeName: string } & IslandTheme> = writab
 	themeName: 'sunset',
 	...islandThemes.sunset
 });
+export const showTutorial: Writable<boolean> = writable(false);
 export const aiSolution: Writable<{
 	state: 'loading' | 'ready';
 	score: number;
@@ -24,5 +25,13 @@ export const aiSolution: Writable<{
 	numOfHighestScoringStates: number;
 	beamSize: number;
 	blueGemPotentialWeight: number;
-}> = writable({ state: 'loading', score: 0, elapsedTime: 0, tileOrder: [], numOfHighestScoringStates: 0, beamSize: 10000, blueGemPotentialWeight: 1 });
+}> = writable({
+	state: 'loading',
+	score: 0,
+	elapsedTime: 0,
+	tileOrder: [],
+	numOfHighestScoringStates: 0,
+	beamSize: 10000,
+	blueGemPotentialWeight: 1
+});
 export const showAIDebugger: Writable<boolean> = writable(false);

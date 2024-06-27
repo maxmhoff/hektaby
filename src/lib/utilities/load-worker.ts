@@ -30,7 +30,12 @@ async function loadWorker(
 	}) => {
 		onMessage(event);
 	};
-	assessDifficultyWorker.postMessage({ predefinedTiles: tiles, zoneQueue, beamSize, blueGemPotentialWeight });
+	assessDifficultyWorker.postMessage({
+		predefinedTiles: tiles,
+		zoneQueue,
+		beamSize,
+		blueGemPotentialWeight
+	});
 }
 
 function onMessage(event: {
