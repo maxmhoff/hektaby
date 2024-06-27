@@ -1,100 +1,126 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
+	import Card from '$lib/components/shared/Card.svelte';
+	import Button from '$lib/components/shared/Button.svelte';
+	import { showTutorial } from '$lib/stores/gameStore';
+	import CardTitle from '$lib/components/shared/CardTitle.svelte';
 
-	let showTutorial = false;
+	export let resetCurrentGame: () => void;
+
+	let showPrompt = false;
+
+	$: if ($showTutorial) {
+		showPrompt = false;
+	}
 
 	onMount(() => {
 		if (typeof window !== 'undefined' && window.localStorage) {
 			// Check if the user has already seen the tutorial
-			const hasSeenTutorial = localStorage.getItem('hasSeenTutorial');
+			const firstTimeHere = localStorage.getItem('firstTimeHere');
 
-			if (!hasSeenTutorial || hasSeenTutorial === 'false') {
-				showTutorial = true;
+			if (!firstTimeHere || firstTimeHere === 'true') {
+				showPrompt = true;
 			}
 		}
 	});
 
 	function closeTutorial() {
-		// Set the flag in local storage
-		localStorage.setItem('hasSeenTutorial', 'true');
-		showTutorial = false;
+		showTutorial.set(false);
+	}
+
+	function handlePromptYes() {
+		showPrompt = false;
+		showTutorial.set(true);
+		localStorage.setItem('firstTimeHere', 'false');
+	}
+
+	function handlePromptNo() {
+		showPrompt = false;
+		localStorage.setItem('firstTimeHere', 'false');
+	}
+
+	function startTutorialMode() {
+		resetCurrentGame();
+		$showTutorial = false;
 	}
 </script>
 
-{#if showTutorial}
-	<div class="tutorial">
-		<div class="tutorial__content">
-			<button on:click={closeTutorial} class="tutorial__close">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M18 6 6 18" /><path d="m6 6 12 12" />
-				</svg>
-			</button>
-			<h3 class="tutorial__title">Welcome to Hexity</h3>
-			<div class="tutorial__actions">
-				<button on:click={closeTutorial}>Close Tutorial</button>
-				<ul class="tutorial__">
-					<li />
-				</ul>
-			</div>
+{#if showPrompt}
+	<Card>
+		<CardTitle>Greetings</CardTitle>
+		<div class="prompt__content">
+			<p class="prompt__text">Would you like a brief introduction to the game?</p>
 		</div>
-	</div>
+		<div class="prompt__footer">
+			<Button onClick={handlePromptYes}>Yes</Button>
+			<Button onClick={handlePromptNo}>No, let me play!</Button>
+		</div>
+	</Card>
+{/if}
+
+{#if $showTutorial}
+	<Card>
+		<CardTitle>Tutorial</CardTitle>
+		<div class="tutorial__content">
+			<p class="tutorial__text">Hektaby is a game about placing city zones on optimal tiles and getting as many points as possible!</p>
+			<p class="tutorial__text">Are you ready for a guided tour?</p>
+		</div>
+		<div class="tutorial__footer">
+			<Button onClick={startTutorialMode}>Yes, start the tour</Button>
+			<Button onClick={closeTutorial}>No, I just want to play!</Button>
+		</div>
+	</Card>
 {/if}
 
 <style lang="scss">
 	@use '$lib/styles/variables.scss' as *;
+	.prompt {
+		&__content {
+			color: white;
+			padding-bottom: 7.5rem;
+		}
+
+		&__text {
+			font-family: 'outfit', sans-serif;
+			font-size: $text-sm;
+			line-height: 1.25;
+			margin-bottom: 1.5rem;
+		}
+
+		&__footer {
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+			left: 0;
+			padding: 2rem;
+			display: flex;
+			flex-flow: column;
+			gap: 1rem;
+		}
+	}
 
 	.tutorial {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		background-color: white;
-		width: 300px;
-		height: 350px;
-		border-radius: 1rem;
-		transform: translate(-50%, -50%);
-		overflow: hidden;
-
 		&__content {
-			padding: 1rem;
+			color: white;
+			padding-bottom: 7.5rem;
 		}
 
-		&__close {
-			display: grid;
-			place-items: center;
-			width: 2rem;
-			height: 2rem;
-			float: right;
-			background-color: transparent;
-			border: none;
-			border-radius: 1rem;
-			cursor: pointer;
-
-			&:hover {
-				box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 5px 0px;
-			}
+		&__text {
+			font-family: 'outfit', sans-serif;
+			font-size: $text-sm;
+			line-height: 1.25;
+			margin-bottom: 1.5rem;
 		}
 
-		&__title {
-            display: grid;
-            place-items: center left;
-            height: 2rem;
-			font-size: $text-md;
-			font-weight: 400;
+		&__footer {
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+			left: 0;
+			padding: 2rem;
+			display: flex;
+			flex-flow: column;
+			gap: 1rem;
 		}
-
-        &__actions {
-            position: absolute;
-            bottom: 1rem;
-        }
 	}
 </style>

@@ -34,13 +34,14 @@
 
     .zone-queue {
         position: absolute;
-        bottom: 3rem;
+        bottom: 5rem;
         width: 100%;
         padding: $container-padding-mobile;
         pointer-events: none;
         user-select: none;
 
         @media (min-width: $tablet) {
+            bottom: 3rem;
 			padding: $container-padding-desktop;
 		}
 

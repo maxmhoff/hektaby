@@ -19,6 +19,9 @@
 	import ThemeEditor from '$lib/components/HUD/ThemeEditor.svelte';
 	import Star from '$lib/components/shared/Star.svelte';
 	import Button from '$lib/components/shared/Button.svelte';
+	import Tutorial from '$lib/components/HUD/Tutorial.svelte';
+	import Card from "$lib/components/shared/Card.svelte";
+	import Footer from '$lib/components/HUD/Footer.svelte';
 
 	let isOpen = false;
 	let animateStars = false;
@@ -93,7 +96,7 @@
 	</Canvas>
 	<ZoneQueue />
 	{#if isOpen}
-		<div class="game__endscreen">
+		<Card>
 			<p class="game__final-score">Final score: {$score}</p>
 			<div class="game__endscreen-stars">
 				{#if $difficulties && animateStars}
@@ -115,10 +118,12 @@
 				<Button onClick={startNewGame}>New Island</Button>
 				<Button onClick={share}>Share</Button>
 			</div>
-		</div>
+		</Card>
 	{/if}
+	<Footer {resetCurrentGame} {startNewGame} />
 	<ThemeEditor />
 	<AIDebugger />
+	<Tutorial {resetCurrentGame} />
 </div>
 
 <style lang="scss">
@@ -131,23 +136,6 @@
 		width: 100vw;
 		height: 100vh;
 		overflow: hidden;
-
-		&__endscreen {
-			position: absolute;
-			inset: 0;
-			margin: auto;
-			width: 340px;
-			height: 394px;
-			padding: 2rem;
-			background-color: $overlay;
-			border-radius: 1rem;
-			border: none;
-			user-select: none;
-			z-index: 1;
-			@media (min-width: $tablet) {
-				width: 360px;
-			}
-		}
 
 		&__final-score {
 			font-size: $text-md;
